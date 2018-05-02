@@ -19,9 +19,8 @@ function createWindow () {
                                     width: 800, 
                                     height: 600,
                                     webPreferences: {
-                                      devTools: true
-                                  }
-
+                                      // devTools: true
+                                    }
                                   }
                                 )
 
@@ -32,6 +31,7 @@ function createWindow () {
     slashes: true
   }))
 
+  mainWindow.webContents.openDevTools();
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 

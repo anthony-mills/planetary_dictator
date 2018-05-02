@@ -1,23 +1,30 @@
 /**
 * Initialise some variables for the Planetary Director file manager
 **/
-$bgColour: #000;
-$txtColour: #fff;
+$bgColour: #fff;
+$txtColour: #000;
 
 body {
 	background-color: $bgColour;
 	color: $txtColour;
 }	
 
+#display-files {
+	margin: 10px;
 
-.center-panel {
-	margin: auto;
-	width: auto;
-	padding: 10px;
-	text-align: center;
-
-	.msg-panel {
-		color: #00f900;
-		height: 20px;
+	li {
+		list-style-type: none;
+		height: 35px;		
+		padding-left: 40px;
+		margin: 0;
 	}
+
+	li.folder-icon {
+		background: url('../img/icons/folder.png') no-repeat left top;
+    }
+
+	.file-icon {
+		background: url('../img/icons/file.png')  no-repeat left top;
+    }    
 }
+
