@@ -2,9 +2,10 @@
   "name": "planetary-director",
   "version": "0.0.1",
   "description": "An electron based filemanger in the style of Norton Commander or Filezilla for managing the filestore of an IPFS ( Interplanetary Filesystem ) node.",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
   },
   "keywords": [
     "filemanger",
@@ -13,7 +14,12 @@
   ],
   "author": "Anthony Mills",
   "license": "GPL-3.0",
-  "dependencies": {
-    "bootstrap": "^4.1.1"
-  }
+  "devDependencies": {
+    "copy-to-clipboard": "^3.0.8",
+    "electron": "^2.0.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.1",
+    "jquery": "^3.3.1"
+  },
+  "dependencies": {}
 }

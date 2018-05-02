@@ -1,0 +1,23 @@
+/**
+* Initialise some variables for the Planetary Director file manager
+**/
+$bgColour: #000;
+$txtColour: #fff;
+
+body {
+	background-color: $bgColour;
+	color: $txtColour;
+}	
+
+
+.center-panel {
+	margin: auto;
+	width: auto;
+	padding: 10px;
+	text-align: center;
+
+	.msg-panel {
+		color: #00f900;
+		height: 20px;
+	}
+}

@@ -1,0 +1,15 @@
+/**
+* Initialise some variables for the Planetary Director file manager
+**/
+body {
+  background-color: #000;
+  color: #fff; }
+
+.center-panel {
+  margin: auto;
+  width: auto;
+  padding: 10px;
+  text-align: center; }
+  .center-panel .msg-panel {
+    color: #00f900;
+    height: 20px; }
