@@ -21,5 +21,7 @@
     "gulp-sass": "^4.0.1",
     "jquery": "^3.3.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-json-storage": "^4.1.0"
+  }
 }
