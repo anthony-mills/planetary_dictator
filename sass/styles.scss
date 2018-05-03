@@ -19,6 +19,10 @@ body {
 		margin: 0;
 	}
 
+	li.parent-icon {
+		background: url('../img/icons/parent-dir.png')  no-repeat left top;
+    }    
+
 	li.folder-icon {
 		background: url('../img/icons/folder.png') no-repeat left top;
     }

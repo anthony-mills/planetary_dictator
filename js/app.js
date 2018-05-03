@@ -44,7 +44,7 @@ var planetaryDirectory = {
     *
     * @param string dirPath
     */
-    lsDir: function ( dirPath ) {
+    lsDir: function ( dirPath, upLevel ) {
         jQuery('#display-files').html(' ');
 
         fileSystem.readdir(dirPath, (readErr, dirContents) => {
@@ -52,9 +52,11 @@ var planetaryDirectory = {
      
             if (readErr) throw  readErr;
 
-            var backPath = path.normalize( dirPath + '/..');
-            var htmlStr = '<li data-path="' + backPath + '" class="dir-element folder-icon"><a href="#">..</a></li>';
-            jQuery('#display-files').append( htmlStr );
+            if (upLevel) {
+                var backPath = path.normalize( dirPath + '/..');
+                var htmlStr = '<li data-path="' + backPath + '" class="dir-element parent-icon"><a href="#">..</a></li>';
+                jQuery('#display-files').append( htmlStr );                
+            }
 
             for (let dirElm of dirContents) {
 
@@ -83,9 +85,10 @@ var planetaryDirectory = {
             var elmPath = jQuery(this).attr("data-path");
 
             var isFolder = jQuery(this).hasClass( "folder-icon" );
+            var isParent = jQuery(this).hasClass( "parent-icon" );
 
-            if ( isFolder ) {
-              console.log("Is a folder");
+            if (isFolder || isParent) {
+              console.log("Is not a folder");
             } else {
               console.log("Is a file");
             }
@@ -94,11 +97,12 @@ var planetaryDirectory = {
         jQuery(document).on('dblclick','.dir-element', {} ,function(e){
             var elmPath = jQuery(this).attr("data-path");
             var isFolder = jQuery(this).hasClass( "folder-icon" );
-
-            if ( isFolder ) {
-              planetaryDirectory.lsDir( elmPath );
+            var isParent = jQuery(this).hasClass( "parent-icon" );
+            
+            if (isFolder || isParent ) {
+              planetaryDirectory.lsDir( elmPath, true );
             } else {
-              planetaryDirectory.openFile( elmPath );
+              planetaryDirectory.openFile( elmPath );                
             }
         });            
     },

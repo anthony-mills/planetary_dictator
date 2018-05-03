@@ -12,6 +12,8 @@ body {
     height: 35px;
     padding-left: 40px;
     margin: 0; }
+  #display-files li.parent-icon {
+    background: url("../img/icons/parent-dir.png") no-repeat left top; }
   #display-files li.folder-icon {
     background: url("../img/icons/folder.png") no-repeat left top; }
   #display-files li.file-icon {
