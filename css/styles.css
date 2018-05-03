@@ -14,5 +14,5 @@ body {
     margin: 0; }
   #display-files li.folder-icon {
     background: url("../img/icons/folder.png") no-repeat left top; }
-  #display-files .file-icon {
+  #display-files li.file-icon {
     background: url("../img/icons/file.png") no-repeat left top; }
