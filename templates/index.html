@@ -9,9 +9,11 @@
 
     <script src="../js/app.js"></script>
 
-    <title>Planetary Director</title>
+    <title>Planetary Dictator</title>
 
     <script>
+      planetaryDirectory.checkSettings();
+
       planetaryDirectory.lsDir('/home/');
       setTimeout(function() {
         planetaryDirectory.bindClicks();
@@ -20,7 +22,8 @@
   </head>
   <body>
     <div class="text-center">
-      <h1>Planetary Director</h1>
+      <h2>Planetary Dictator</h2>
+
     </div>
 
     <div class="row">
@@ -32,5 +35,11 @@
         <div id="file-info"></div>
       </div>      
     </div>
+
+    <div class="row">
+      <div class="col" id="ipfs-status">
+        IPFS Status
+      </div>
+    </div>    
   </body>
 </html>

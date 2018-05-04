@@ -1,9 +1,21 @@
 /**
 * Initialise some variables for the Planetary Director file manager
 **/
+@font-face {
+  font-family: "Orbitron";
+  src: url("fonts/orbitron.eot?") format("eot"), url("fonts/orbitron.woff2") format("woff2"), url("fonts/orbitron.woff") format("woff"), url("fonts/orbitron.ttf") format("truetype"); }
+
+@font-face {
+  font-family: "Roboto";
+  src: url("fonts/roboto.eot?") format("eot"), url("fonts/roboto.woff2") format("woff2"), url("fonts/roboto.woff") format("woff"), url("fonts/roboto.ttf") format("truetype"); }
+
 body {
+  padding: 15px;
   background-color: #fff;
   color: #000; }
+
+h1, h2 {
+  font-family: "Orbitron"; }
 
 #display-files {
   margin: 10px;

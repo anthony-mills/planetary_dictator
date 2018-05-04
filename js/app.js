@@ -10,7 +10,19 @@ const path = require('path');
 const storage = require('electron-json-storage');
 const {shell} = require('electron');
 
+const IPFS = require('ipfs');
+
+
+
 var planetaryDirectory = {
+
+    checkSettings: function () {
+        var curSettings = planetaryDirectory.getSettings();
+
+        if (!curSettings) {
+            window.location.replace("settings.html");
+        }
+    },
 
     getSettings: function () {
         storage.getAll(function(storageError, settingsData) {
