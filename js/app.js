@@ -102,8 +102,7 @@ var planetaryDirectory = {
                         '<li><strong>Type:</strong> ' + objType + '</li>' +
                         '<li><strong>Size:</strong> ' + fileDets.size + ' bytes</li>' +
                         '<li><strong>Permissions:</strong> ' + filePerms + '</li>' +
-                        '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +
-                        '<li><strong>Modified:</strong> ' + fileDets.mtime.toLocaleString() + '</li>' +                        
+                        '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +                       
                         '</ul>';
 
             jQuery('#file-info').append( htmlStr );

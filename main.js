@@ -20,7 +20,8 @@ function createWindow () {
                                     height: 600,
                                     webPreferences: {
                                       // devTools: true
-                                    }
+                                    },
+                                    icon: path.join(__dirname, 'img/icons/icon.png')
                                   }
                                 )
 
