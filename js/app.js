@@ -81,7 +81,7 @@ var planetaryDirectory = {
 
     fileInfo: function( filePath ) {
         fileSystem.stat( filePath, (readErr, fileDets) => {
-            console.log( fileDets );
+            var filePerms = '0' + (fileDets.mode & 0777).toString(8)
 
             var objType = 'Unknown';
 
@@ -101,6 +101,7 @@ var planetaryDirectory = {
             var htmlStr = '<ul>' + 
                         '<li><strong>Type:</strong> ' + objType + '</li>' +
                         '<li><strong>Size:</strong> ' + fileDets.size + ' bytes</li>' +
+                        '<li><strong>Permissions:</strong> ' + filePerms + '</li>' +
                         '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +
                         '<li><strong>Modified:</strong> ' + fileDets.mtime.toLocaleString() + '</li>' +                        
                         '</ul>';
