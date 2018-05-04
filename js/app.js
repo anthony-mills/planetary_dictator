@@ -79,6 +79,36 @@ var planetaryDirectory = {
 
     },    
 
+    fileInfo: function( filePath ) {
+        fileSystem.stat( filePath, (readErr, fileDets) => {
+            console.log( fileDets );
+
+            var objType = 'Unknown';
+
+            if (fileDets.isDirectory()) {
+                var objType = 'Directory';                
+            }
+
+            if (fileDets.isFile()) {
+                var objType = 'File';                
+            }
+
+            if (fileDets.isSymbolicLink()) {
+                var objType = 'Link';                
+            }            
+            jQuery('#file-info').html('');
+
+            var htmlStr = '<ul>' + 
+                        '<li><strong>Type:</strong> ' + objType + '</li>' +
+                        '<li><strong>Size:</strong> ' + fileDets.size + ' bytes</li>' +
+                        '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +
+                        '<li><strong>Modified:</strong> ' + fileDets.mtime.toLocaleString() + '</li>' +                        
+                        '</ul>';
+
+            jQuery('#file-info').append( htmlStr );
+        });
+    },
+
     bindClicks: function() {
 
         jQuery(document).on('click','.dir-element', {} ,function(e){
@@ -88,9 +118,9 @@ var planetaryDirectory = {
             var isParent = jQuery(this).hasClass( "parent-icon" );
 
             if (isFolder || isParent) {
-              console.log("Is not a folder");
+              planetaryDirectory.fileInfo( elmPath );
             } else {
-              console.log("Is a file");
+              planetaryDirectory.fileInfo( elmPath );
             }
         });               
 

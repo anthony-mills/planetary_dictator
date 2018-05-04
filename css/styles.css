@@ -6,7 +6,9 @@ body {
   color: #000; }
 
 #display-files {
-  margin: 10px; }
+  margin: 10px;
+  height: 50vh;
+  overflow-y: scroll; }
   #display-files li {
     list-style-type: none;
     height: 35px;
