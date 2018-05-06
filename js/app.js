@@ -5,41 +5,32 @@
 */
 window.jQuery = require('jquery');
 
+const {shell} = require('electron');
+const os = require('os');
 const fileSystem = require('fs');
 const path = require('path');
-const storage = require('electron-json-storage');
-const {shell} = require('electron');
+const store = require('electron-store');
 
 const IPFS = require('ipfs');
 
-
+var storage = new store();
 
 var planetaryDirectory = {
 
     checkSettings: function () {
-        var curSettings = planetaryDirectory.getSettings();
+        var settingsData = storage.get('appSettings');
 
-        if (!curSettings) {
+        if (!settingsData) {
             window.location.replace("settings.html");
+        } else {
+            return settingsData;
         }
     },
 
-    getSettings: function () {
-        storage.getAll(function(storageError, settingsData) {
-          if (storageError) throw error;
-         
-          if (settingsData.length > 0) {
-            return settingsData;
-          }
-        });
-    },
-
     saveSettings: function ( appData ) {
-        const storage = require('electron-json-storage');
 
-        storage.set('settings', appData, function(error) {
-          if (error) throw error;
-        });
+        storage.set('appSettings', appData);
+
     },
 
     /**
@@ -118,6 +109,23 @@ var planetaryDirectory = {
                         '</ul>';
 
             jQuery('#file-info').append( htmlStr );
+        });
+    },
+
+    settingsForm: function() {
+        jQuery(document).on('click','.save-button', {} ,function(e){
+            var ipfsPath = document.getElementById("ipfs-repo").files[0].path;
+            var systemPath = document.getElementById("system-path").files[0].path;
+
+            var appSettings = {
+                'ipfspath' : ipfsPath,
+                'systempath' : systemPath
+            }
+
+            planetaryDirectory.saveSettings( appSettings );
+
+            window.location.replace("index.html");
+            e.preventDefault()
         });
     },
 

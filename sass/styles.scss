@@ -55,3 +55,15 @@ h1, h2 {
     }    
 }
 
+.settings-field {
+	margin-bottom: 20px;
+
+	input {
+		padding-left: 15px;
+	}
+ 
+}
+
+.save-button:hover {
+	background-color: #025ade;
+}

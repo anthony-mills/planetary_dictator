@@ -32,3 +32,11 @@ h1, h2 {
     background: url("../img/icons/folder.png") no-repeat left top; }
   #display-files li.file-icon {
     background: url("../img/icons/file.png") no-repeat left top; }
+
+.settings-field {
+  margin-bottom: 20px; }
+  .settings-field input {
+    padding-left: 15px; }
+
+.save-button:hover {
+  background-color: #025ade; }

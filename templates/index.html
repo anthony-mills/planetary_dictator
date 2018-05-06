@@ -12,10 +12,13 @@
     <title>Planetary Dictator</title>
 
     <script>
-      planetaryDirectory.checkSettings();
+      var appSettings = planetaryDirectory.checkSettings();
 
-      planetaryDirectory.lsDir('/home/');
+      console.log( appSettings.system-path );
+      planetaryDirectory.lsDir( appSettings.systempath );
+
       setTimeout(function() {
+        // console.log( appSettings );
         planetaryDirectory.bindClicks();
       }, 500);
     </script>    
