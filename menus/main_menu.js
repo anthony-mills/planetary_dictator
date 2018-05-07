@@ -6,7 +6,7 @@ const template = [
   {
     
     label: 'View',
-    submenu: [
+    submenu: [    
       {role: 'reload'},
       {role: 'forcereload'},    
       {

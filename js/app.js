@@ -15,7 +15,7 @@ const IPFS = require('ipfs');
 
 var storage = new store();
 
-var planetaryDirectory = {
+var planetaryDictator = {
 
     checkSettings: function () {
         var settingsData = storage.get('appSettings');
@@ -122,7 +122,7 @@ var planetaryDirectory = {
                 'systempath' : systemPath
             }
 
-            planetaryDirectory.saveSettings( appSettings );
+            planetaryDictator.saveSettings( appSettings );
 
             window.location.replace("index.html");
             e.preventDefault()
@@ -138,9 +138,9 @@ var planetaryDirectory = {
             var isParent = jQuery(this).hasClass( "parent-icon" );
 
             if (isFolder || isParent) {
-              planetaryDirectory.fileInfo( elmPath );
+              planetaryDictator.fileInfo( elmPath );
             } else {
-              planetaryDirectory.fileInfo( elmPath );
+              planetaryDictator.fileInfo( elmPath );
             }
         });               
 
@@ -150,9 +150,9 @@ var planetaryDirectory = {
             var isParent = jQuery(this).hasClass( "parent-icon" );
             
             if (isFolder || isParent ) {
-              planetaryDirectory.lsDir( elmPath, true );
+              planetaryDictator.lsDir( elmPath, true );
             } else {
-              planetaryDirectory.openFile( elmPath );                
+              planetaryDictator.openFile( elmPath );                
             }
         });            
     },
