@@ -14,6 +14,9 @@
     <script>
       var appSettings = planetaryDictator.checkSettings();
 
+      const node = new IPFS({ repo: appSettings.ipfspath });
+      planetaryDictator.startIpfs();
+
       planetaryDictator.lsDir( appSettings.systempath );
 
       setTimeout(function() {
@@ -29,19 +32,21 @@
     </div>
 
     <div class="row">
-      <div class="col" id="display-files">
-        
-      </div>
+      <!-- Display the local file system -->
+      <div class="col" id="display-local-files"></div>
 
-      <div class="col" id="action-panel">
-        <div id="file-info"></div>
-      </div>      
+      <!-- Display the IPFS file system -->
+      <div class="col" id="display-ipfs-files"></div>      
     </div>
 
     <div class="row">
       <div class="col" id="ipfs-status">
-        IPFS Status
+        <strong>IPFS Status:</strong> Offline
       </div>
+
+      <div class="col" id="action-panel">
+        <div id="file-info"></div>
+      </div>            
     </div>    
   </body>
 </html>

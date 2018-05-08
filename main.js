@@ -43,6 +43,8 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+    planetaryDictator.stopIpfs();
+    
     mainWindow = null
   })
 
@@ -52,7 +54,9 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

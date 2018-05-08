@@ -9,13 +9,33 @@ const {shell} = require('electron');
 const os = require('os');
 const fileSystem = require('fs');
 const path = require('path');
-const store = require('electron-store');
+const Store = require('electron-store');
+const storage = new Store();
 
 const IPFS = require('ipfs');
 
-var storage = new store();
-
 var planetaryDictator = {
+
+    startIpfs: function () {
+        
+        node.on('ready', () => {
+            node.id((err, id) => {
+              if (err) {
+                return console.log(err)
+              }
+              var ipfsStatus = "<strong>IPFS:</strong> Online <br/><strong>Agent:</strong> " + id.agentVersion;
+              jQuery('#ipfs-status').html( ipfsStatus );
+              console.log(id)
+              console.log(node);
+            })
+        })
+    },
+
+    stopIpfs: function ( ipfsDir ) {
+        node.shutdown(() => {
+            console.log('Stopping IPFS node');
+        })
+    },
 
     checkSettings: function () {
         var settingsData = storage.get('appSettings');
@@ -48,7 +68,7 @@ var planetaryDictator = {
     * @param string dirPath
     */
     lsDir: function ( dirPath, upLevel ) {
-        jQuery('#display-files').html(' ');
+        jQuery('#display-local-files').html(' ');
 
         fileSystem.readdir(dirPath, (readErr, dirContents) => {
             'use strict';
@@ -58,7 +78,7 @@ var planetaryDictator = {
             if (upLevel) {
                 var backPath = path.normalize( dirPath + '/..');
                 var htmlStr = '<li data-path="' + backPath + '" class="dir-element parent-icon"><a href="#">..</a></li>';
-                jQuery('#display-files').append( htmlStr );                
+                jQuery('#display-local-files').append( htmlStr );                
             }
 
             for (let dirElm of dirContents) {
@@ -68,11 +88,11 @@ var planetaryDictator = {
                     if(fileDets.isDirectory()){
                         var htmlStr = '<li data-path="' + dirPath + '/' + dirElm + '" class="dir-element folder-icon"><a href="#">' + dirElm + '</a></li>';
 
-                        jQuery('#display-files').append( htmlStr );
+                        jQuery('#display-local-files').append( htmlStr );
                     } else {
                         var htmlStr = '<li data-path="' + dirPath + '/' + dirElm + '" class="dir-element file-icon"><a href="#">' + dirElm + '</a></li>';
 
-                        jQuery('#display-files').append( htmlStr );
+                        jQuery('#display-local-files').append( htmlStr );
                     }
 
                 });              
@@ -107,6 +127,10 @@ var planetaryDictator = {
                         '<li><strong>Permissions:</strong> ' + filePerms + '</li>' +
                         '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +                       
                         '</ul>';
+
+            jQuery('#file-info').append( htmlStr );
+
+            var htmlStr = '<a href="#" data-path="'+ filePath +'" class="move-to-ipfs">Add to IPFS</a>';
 
             jQuery('#file-info').append( htmlStr );
         });
@@ -154,6 +178,25 @@ var planetaryDictator = {
             } else {
               planetaryDictator.openFile( elmPath );                
             }
-        });            
+        }); 
+
+        jQuery(document).on('click','.move-to-ipfs', {} ,function(e){
+            var elmPath = jQuery(this).attr("data-path");
+
+            fileSystem.stat( elmPath, (readErr, fileDets) => {
+                console.log( fileDets );
+            });
+
+            var filePath ={
+                path: "",
+                content: fileSystem.readFileSync( elmPath )
+            }
+
+            node.files.add(filePath, (err, res) => {
+              console.log( err );
+              console.log( res.hash );
+            })            
+
+        });                               
     },
 };
