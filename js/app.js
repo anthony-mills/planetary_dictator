@@ -11,6 +11,7 @@ const fileSystem = require('fs');
 const path = require('path');
 const Store = require('electron-store');
 const storage = new Store();
+const dir = require('node-dir');
 
 const IPFS = require('ipfs');
 
@@ -20,13 +21,16 @@ var planetaryDictator = {
         
         node.on('ready', () => {
             node.id((err, id) => {
-              if (err) {
-                return console.log(err)
-              }
-              var ipfsStatus = "<strong>IPFS:</strong> Online <br/><strong>Agent:</strong> " + id.agentVersion;
-              jQuery('#ipfs-status').html( ipfsStatus );
-              console.log(id)
-              console.log(node);
+                if (err) {
+                    return console.log(err)
+                }
+
+                var ipfsStatus = "<strong>IPFS:</strong> Online <br/><strong>Agent:</strong> " + id.agentVersion;
+                jQuery('#ipfs-status').html( ipfsStatus );
+
+                var ipfspath = '/ipfs/' + id;
+
+       
             })
         })
     },
@@ -84,23 +88,77 @@ var planetaryDictator = {
             for (let dirElm of dirContents) {
 
                 fileSystem.stat( dirPath + '/' + dirElm, (readErr, fileDets) => {
+                    if (fileDets) {
+                        if(fileDets.isDirectory()){
+                            var htmlStr = '<li data-name="' + dirElm + '" data-path="' + dirPath + '/' + dirElm + '" class="dir-element folder-icon"><a href="#">' + dirElm + '</a></li>';
 
-                    if(fileDets.isDirectory()){
-                        var htmlStr = '<li data-path="' + dirPath + '/' + dirElm + '" class="dir-element folder-icon"><a href="#">' + dirElm + '</a></li>';
+                            jQuery('#display-local-files').append( htmlStr );
+                        } else {
+                            var htmlStr = '<li data-name="' + dirElm + '" data-path="' + dirPath + '/' + dirElm + '" class="dir-element file-icon"><a href="#">' + dirElm + '</a></li>';
 
-                        jQuery('#display-local-files').append( htmlStr );
-                    } else {
-                        var htmlStr = '<li data-path="' + dirPath + '/' + dirElm + '" class="dir-element file-icon"><a href="#">' + dirElm + '</a></li>';
-
-                        jQuery('#display-local-files').append( htmlStr );
+                            jQuery('#display-local-files').append( htmlStr );
+                        }                        
                     }
-
                 });              
             }      
 
         });
 
-    },    
+    },
+
+    addIpfsFiles: function( filePath ) {
+        if (!filePath) {
+            return;
+        }
+
+        fileSystem.stat( filePath, (readErr, fileDets) => { 
+            /** 
+            * If we are handling a directory walk the contents and
+            * add the files to the IPFS node
+            **/
+            if (fileDets.isDirectory()) { 
+                var dirFiles = [];
+
+                dir.readFiles(filePath, function(err, content, fileName, next) {
+
+                    var fileObj ={
+                        path: "",
+                        content: fileSystem.readFileSync( fileName )
+                    }    
+
+                    node.files.add(fileObj, (err, res) => {
+
+                        if (!err) {
+                            var ipfsResult = res.shift();
+
+                            var fileInfo = {
+                                'file_name': fileName,
+                                'ipfs_hash': ipfsResult.hash,
+                                'ipfs_path': ipfsResult.path
+                            }
+                            dirFiles.push( fileInfo ); 
+                        }
+                    });
+
+                    next();
+                }, function() {
+                  console.log(dirFiles);
+                })            
+            }
+
+            if (fileDets.isFile()) { 
+                var fileObj ={
+                    path: "",
+                    content: fileSystem.readFileSync( filePath )
+                }
+
+                node.files.add(fileObj, (err, res) => {
+                    console.log( res.shift() );
+                    //return res.shift(); 
+                });
+            }       
+        });     
+    },     
 
     fileInfo: function( filePath ) {
         fileSystem.stat( filePath, (readErr, fileDets) => {
@@ -122,6 +180,7 @@ var planetaryDictator = {
             jQuery('#file-info').html('');
 
             var htmlStr = '<ul>' + 
+                        '<li><strong>Path:</strong> ' + filePath + '</li>' +            
                         '<li><strong>Type:</strong> ' + objType + '</li>' +
                         '<li><strong>Size:</strong> ' + fileDets.size + ' bytes</li>' +
                         '<li><strong>Permissions:</strong> ' + filePerms + '</li>' +
@@ -132,7 +191,8 @@ var planetaryDictator = {
 
             var htmlStr = '<a href="#" data-path="'+ filePath +'" class="move-to-ipfs">Add to IPFS</a>';
 
-            jQuery('#file-info').append( htmlStr );
+            jQuery('#file-info').append( htmlStr );                
+
         });
     },
 
@@ -183,20 +243,7 @@ var planetaryDictator = {
         jQuery(document).on('click','.move-to-ipfs', {} ,function(e){
             var elmPath = jQuery(this).attr("data-path");
 
-            fileSystem.stat( elmPath, (readErr, fileDets) => {
-                console.log( fileDets );
-            });
-
-            var filePath ={
-                path: "",
-                content: fileSystem.readFileSync( elmPath )
-            }
-
-            node.files.add(filePath, (err, res) => {
-              console.log( err );
-              console.log( res.hash );
-            })            
-
+            return planetaryDictator.addIpfsFiles( elmPath );
         });                               
     },
 };
