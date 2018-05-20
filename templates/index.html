@@ -12,12 +12,7 @@
     <title>Planetary Dictator</title>
 
     <script>
-      var appSettings = planetaryDictator.checkSettings();
-
-      const node = new IPFS({ repo: appSettings.ipfspath });
-      planetaryDictator.startIpfs();
-
-      planetaryDictator.lsDir( appSettings.systempath );
+      planetaryDictator.lsSysDir( userHome );
 
       setTimeout(function() {
         // console.log( appSettings );
