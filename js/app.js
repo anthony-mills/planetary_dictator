@@ -9,14 +9,16 @@ const {shell} = require('electron');
 const os = require('os');
 const fileSystem = require('fs');
 const path = require('path');
+const userHome = require('user-home');
+
 const Store = require('electron-store');
-const storage = new Store();
+const appStorage = new Store();
+
 const dir = require('node-dir');
 const IPFS = require('ipfs');
 
 const ipfsAPI = require('ipfs-api');
 const ipfsFactory = require('ipfsd-ctl')
-const userHome = require('user-home');
 
 const ipfsServer = ipfsFactory.create()
 
@@ -114,6 +116,7 @@ var planetaryDictator = {
             /** 
             * If we are handling a directory walk the contents and
             * add the files to the IPFS node
+            * 
             **/
             if (fileDets.isDirectory()) { 
 
@@ -130,10 +133,8 @@ var planetaryDictator = {
                     var dirElm = path.dirname(fsElm + "/" + path.relative(filePath, dirStruct[i])) + "/";
 
                     var fileObj = {
-                        path: '/' + dirElm ,
-                        content: fileSystem.readFileSync( dirStruct[i] )
+                        path : dirElm + fileName
                     }    
-
 
                     ipfsNode.files.add(fileObj, (err, res) => {
 
@@ -145,6 +146,7 @@ var planetaryDictator = {
                                 'ipfs_hash': ipfsResult.hash,
                                 'ipfs_path': ipfsResult.path
                             }
+
                             planetaryDictator.storeIpfsObjects( fileInfo );
                         }
 
@@ -156,10 +158,9 @@ var planetaryDictator = {
             if (fileDets.isFile()) { 
 
                 var fileObj ={
-                    path: "",
-                    content: Buffer.from(fileSystem.readFileSync(filePath))
+                    path: filePath,
                 }
-                console.log( fileObj );
+
                 ipfsNode.files.add(fileObj, (err, res) => {
                    if(err) throw err;
 
@@ -170,7 +171,6 @@ var planetaryDictator = {
                         'ipfs_hash': ipfsResult.hash,
                         'ipfs_path': false
                     }
-                    console.log( fileInfo );
                     planetaryDictator.storeIpfsObjects( fileInfo );
                 });
             }       
@@ -178,33 +178,17 @@ var planetaryDictator = {
     },   
 
     storeIpfsObjects: function( uploadedFile ) {
-        console.log(planetaryDictator.lsIpfsPath('/'));
+        var ipfsFiles = appStorage.get('ipfsFiles');
 
-        return;
-
-        if (!ipfsData) {
-            var ipfsData = {};
+        if (!ipfsFiles) {
+           var ipfsFiles = []; 
         }
 
-        if (!uploadedFile.ipfs_path) {
-            ipfsData[uploadedFile.ipfs_hash] = uploadedFile;
-        } else {
-            var pathParts = uploadedFile.ipfs_path.split(path.sep);
-            var dirPath = '' 
-            for (var i = 0, len = pathParts.length; i < len; i++) {
-                console.log(pathParts[i]);
-                if (!pathParts[i]) { 
-                    break; 
-                } else {
-                    var subDir = pathParts[i];
-                    if (!ipfsData[subDir]) {
-                        ipfsData[subDir];
-                    }
-                }
-            console.log( ipfsData );
-            }           
-        }
+        ipfsFiles.push(uploadedFile);
+    
+        console.log(ipfsFiles);
 
+        appStorage.set('ipfsFiles', ipfsFiles);
     }, 
 
     /**
