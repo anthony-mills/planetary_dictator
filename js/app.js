@@ -13,6 +13,7 @@ const userHome = require('user-home');
 
 const Store = require('electron-store');
 const appStorage = new Store();
+appStorage.set('ipfsFiles', false);
 
 const dir = require('node-dir');
 const IPFS = require('ipfs');
@@ -54,6 +55,24 @@ var planetaryDictator = {
         shell.openItem( filePath );
     },
 
+    /**
+    * List the ipfs files
+    *
+    * @param array ipfsFiles
+    */
+    lsIPFS: function ( ipfsFiles ) {
+
+        jQuery('#display-ipfs-files').html(' ');
+
+        for (var i = 0, len = ipfsFiles.length; i < len; i++) {
+            if (ipfsFiles[i]) {;
+                var htmlStr = '<li class="ipfs-element file-icon" data-name="' + ipfsFiles[i].file_name + '"><a href="#">' + ipfsFiles[i].file_name + '</a></li>';
+                jQuery('#display-ipfs-files').append( htmlStr );
+            }
+
+        }        
+
+    },
     /**
     * List the contents of a directory
     *
@@ -158,7 +177,7 @@ var planetaryDictator = {
             if (fileDets.isFile()) { 
 
                 var fileObj ={
-                    path: filePath,
+                    content: fileSystem.createReadStream( filePath )
                 }
 
                 ipfsNode.files.add(fileObj, (err, res) => {
@@ -174,21 +193,42 @@ var planetaryDictator = {
                     planetaryDictator.storeIpfsObjects( fileInfo );
                 });
             }       
-        });     
+        });    
     },   
 
+    /** 
+    * Store the details of a file added to IPFS for future reference
+    *
+    * @param object uploadedFile
+    **/
     storeIpfsObjects: function( uploadedFile ) {
         var ipfsFiles = appStorage.get('ipfsFiles');
 
         if (!ipfsFiles) {
            var ipfsFiles = []; 
         }
+        
+        for (var i = 0, len = ipfsFiles.length; i < len; i++) {
+            if (ipfsFiles[i]) {;
 
+                if (typeof ipfsFiles[i].ipfs_hash != "undefined") {
+                    if (uploadedFile.ipfs_hash == ipfsFiles[i].ipfs_hash ) {
+                        delete ipfsFiles[i];
+                    }                
+                }                
+            }
+
+        }
+
+        var ipfsFiles = ipfsFiles.filter(function(x){
+          return (x !== (undefined || null || ''));
+        });
         ipfsFiles.push(uploadedFile);
-    
-        console.log(ipfsFiles);
+
+        planetaryDictator.lsIPFS(ipfsFiles);
 
         appStorage.set('ipfsFiles', ipfsFiles);
+
     }, 
 
     /**

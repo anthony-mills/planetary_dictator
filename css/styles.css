@@ -17,20 +17,20 @@ body {
 h1, h2 {
   font-family: "Orbitron"; }
 
-#display-local-files {
+#display-local-files, #display-ipfs-files {
   margin: 10px;
   height: 50vh;
   overflow-y: scroll; }
-  #display-local-files li {
+  #display-local-files li, #display-ipfs-files li {
     list-style-type: none;
     height: 35px;
     padding-left: 40px;
     margin: 0; }
-  #display-local-files li.parent-icon {
+  #display-local-files li.parent-icon, #display-ipfs-files li.parent-icon {
     background: url("../img/icons/parent-dir.png") no-repeat left top; }
-  #display-local-files li.folder-icon {
+  #display-local-files li.folder-icon, #display-ipfs-files li.folder-icon {
     background: url("../img/icons/folder.png") no-repeat left top; }
-  #display-local-files li.file-icon {
+  #display-local-files li.file-icon, #display-ipfs-files li.file-icon {
     background: url("../img/icons/file.png") no-repeat left top; }
 
 .settings-field {
