@@ -10,12 +10,37 @@
   src: url("fonts/roboto.eot?") format("eot"), url("fonts/roboto.woff2") format("woff2"), url("fonts/roboto.woff") format("woff"), url("fonts/roboto.ttf") format("truetype"); }
 
 body {
+  height: 100px;
   padding: 15px;
   background-color: #fff;
   color: #000; }
 
+.body-cover {
+  z-index: 5;
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  background-image: url("../img/spaceman.jpg");
+  background-repeat: no-repeat;
+  background-position: left center; }
+
 h1, h2 {
   font-family: "Orbitron"; }
+
+.boot-quote {
+  color: #333;
+  font-size: 90%; }
+  .boot-quote p {
+    text-align: center; }
+  .boot-quote .quote-attribution {
+    font-style: italic;
+    float: right;
+    font-size: 90%; }
 
 #display-local-files, #display-ipfs-files {
   margin: 10px;
@@ -33,10 +58,8 @@ h1, h2 {
   #display-local-files li.file-icon, #display-ipfs-files li.file-icon {
     background: url("../img/icons/file.png") no-repeat left top; }
 
-.settings-field {
-  margin-bottom: 20px; }
-  .settings-field input {
-    padding-left: 15px; }
+.modal-content {
+  border: 1px solid #000; }
 
 .save-button:hover {
   background-color: #025ade; }

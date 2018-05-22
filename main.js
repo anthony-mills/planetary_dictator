@@ -20,6 +20,8 @@ function createWindow () {
                                   {
                                     minWidth: 400,                                    
                                     minHeight: 300,
+                                    maxWidth: 1200,
+                                    maxHeight: 900,
                                     width: 800, 
                                     height: 600,
                                     webPreferences: {
@@ -28,7 +30,7 @@ function createWindow () {
                                     icon: path.join(__dirname, 'img/icons/icon.png')
                                   }
                                 )
-
+  
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, './templates/index.html'),

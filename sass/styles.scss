@@ -21,14 +21,49 @@ $txtColour: #000;
 }
 
 body {
+	height: 100px;
 	padding: 15px;
 	background-color: $bgColour;
 	color: $txtColour;
 }	
 
+.body-cover
+{
+	z-index: 5;
+    position:fixed;
+
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,1);
+    background-image: url('../img/spaceman.jpg');
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
 h1, h2 {
 	font-family: "Orbitron";
-} 
+}
+
+.boot-quote {
+	color: #333;
+	font-size: 90%;	
+
+	p {
+		text-align: center;
+	}
+
+	.quote-attribution {
+		font-style: italic;
+		float: right;
+		font-size: 90%;
+	}
+}
 
 #display-local-files, #display-ipfs-files {
 	margin: 10px;
@@ -55,13 +90,8 @@ h1, h2 {
     }    
 }
 
-.settings-field {
-	margin-bottom: 20px;
-
-	input {
-		padding-left: 15px;
-	}
- 
+.modal-content {
+	border: 1px solid #000;
 }
 
 .save-button:hover {

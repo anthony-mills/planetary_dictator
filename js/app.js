@@ -39,6 +39,11 @@ ipfsServer.spawn((err, ipfsInfo) => {
         );
 
         ipfsNode = ipfsAPI({port: ipfsInfo.api.apiPort});
+
+        setTimeout(function() {
+            jQuery('#loading-model').hide();
+            jQuery( ".body-cover" ).fadeOut( 800 );
+        }, 500);        
     })
 
     
