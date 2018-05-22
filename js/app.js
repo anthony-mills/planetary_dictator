@@ -6,6 +6,8 @@
 window.jQuery = require('jquery');
 
 const {shell} = require('electron');
+const remote = require('electron').remote;
+
 const os = require('os');
 const fileSystem = require('fs');
 const path = require('path');
@@ -19,7 +21,7 @@ const dir = require('node-dir');
 const IPFS = require('ipfs');
 
 const ipfsAPI = require('ipfs-api');
-const ipfsFactory = require('ipfsd-ctl')
+const ipfsFactory = require('ipfsd-ctl');
 
 const ipfsServer = ipfsFactory.create()
 
@@ -52,6 +54,16 @@ ipfsServer.spawn((err, ipfsInfo) => {
 var planetaryDictator = {
 
     /**
+    * Shutdown the IPFS daemon and exit the program
+    *
+    */
+    exitProgram: function() {
+        ipfsNode.shutdown();
+
+        remote.getCurrentWindow().close()
+    },
+
+    /**
     * Open a file using the system default associated application
     *
     * @param string filePath
@@ -67,17 +79,18 @@ var planetaryDictator = {
     */
     lsIPFS: function ( ipfsFiles ) {
 
-        jQuery('#display-ipfs-files').html(' ');
+        jQuery('#display-ipfs-files').html();
 
         for (var i = 0, len = ipfsFiles.length; i < len; i++) {
             if (ipfsFiles[i]) {;
-                var htmlStr = '<li class="ipfs-element file-icon" data-name="' + ipfsFiles[i].file_name + '"><a href="#">' + ipfsFiles[i].file_name + '</a></li>';
+                var htmlStr = '<li class="ipfs-element file-icon" data-ipfs-elm="' + i + '">' +
+                            '<a href="#">' + ipfsFiles[i].file_name + '</a></li>';
                 jQuery('#display-ipfs-files').append( htmlStr );
             }
 
         }        
-
     },
+
     /**
     * List the contents of a directory
     *
@@ -195,6 +208,11 @@ var planetaryDictator = {
                         'ipfs_hash': ipfsResult.hash,
                         'ipfs_path': false
                     }
+                    var currentDate = new Date(); 
+                    fileInfo.time = currentDate.getHours() + ":" + currentDate.getMinutes() + ' ' +
+                                    currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
+
+
                     planetaryDictator.storeIpfsObjects( fileInfo );
                 });
             }       
@@ -235,6 +253,31 @@ var planetaryDictator = {
         appStorage.set('ipfsFiles', ipfsFiles);
 
     }, 
+
+    /**
+    * Get the information for an IPFS object
+    *
+    * @param integer ipfsElm
+    **/
+    ipfsObj: function( ipfsElm ) {
+        var ipfsFiles = appStorage.get('ipfsFiles');
+        var ipfsFile = ipfsFiles[0];
+        
+        console.log(ipfsFile);
+        jQuery('#file-info').html('');
+
+        var ipfsGateway = '<a class="open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">' +
+                        ipfsFile.ipfs_hash + '</a>';
+
+        var htmlStr = '<ul>' + 
+                    '<li><strong>Filename:</strong> ' + ipfsFile.file_name + '</li>' +            
+                    '<li><strong>Hash:</strong> ' + ipfsGateway + '</li>' +
+                    '<li><strong>Added:</strong> ' + ipfsFile.time + '</li>' +                     
+                    '</ul>';
+
+        jQuery('#file-info').append( htmlStr );               
+
+    },
 
     /**
     * Get the file info for a file or directory on the local filesystem
@@ -319,6 +362,12 @@ var planetaryDictator = {
             }
         });               
 
+        jQuery(document).on('click','.ipfs-element', {} ,function(e){
+            var ipfsElm = jQuery(this).attr("data-ipfs-elm");
+
+            planetaryDictator.ipfsObj( ipfsElm );
+        });               
+
         jQuery(document).on('dblclick','.dir-element', {} ,function(e){
             var elmPath = jQuery(this).attr("data-path");
             var isFolder = jQuery(this).hasClass( "folder-icon" );
@@ -331,11 +380,23 @@ var planetaryDictator = {
             }
         }); 
 
+        jQuery(document).on('click','.open-external', {} ,function(e){
+            var linkLocation = jQuery(this).attr('href');
+
+            planetaryDictator.openFile( linkLocation );
+
+            e.preventDefault()
+        }); 
+
         jQuery(document).on('click','.move-to-ipfs', {} ,function(e){
             var elmPath = jQuery(this).attr("data-path");
             var fsElm = jQuery(this).attr("data-name");
 
             return planetaryDictator.addIpfsFiles( elmPath, fsElm );
-        });                               
+        });
+
+        jQuery(document).on('click','.exit-program', {} ,function(e){
+            planetaryDictator.exitProgram();
+        });                                         
     },
 };
