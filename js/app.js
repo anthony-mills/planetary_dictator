@@ -43,8 +43,13 @@ ipfsServer.spawn((err, ipfsInfo) => {
         ipfsNode = ipfsAPI({port: ipfsInfo.api.apiPort});
 
         setTimeout(function() {
-            jQuery('#loading-model').hide();
-            jQuery( ".body-cover" ).fadeOut( 800 );
+            jQuery('.close-model').show();
+            jQuery('#notification-model').hide();
+
+            jQuery('.modal-body').html();
+            jQuery('.modal-title').html();
+
+            jQuery( ".loading-cover" ).fadeOut( 800 );
         }, 500);        
     })
 
@@ -89,6 +94,42 @@ var planetaryDictator = {
             }
 
         }        
+    },
+
+    /**
+    * Show the swarm peers
+    */
+    showSwarmPeers: function () {
+        ipfsNode.swarm.peers((err, ipfsPeers) => {
+            if (err) {
+              return onError(err)
+            }
+
+            jQuery('#notification-model').show();
+            jQuery(".modal-title").html('Swarm Peers: '  + ipfsPeers.length);
+
+            if (ipfsPeers.length > 0) {
+                var modelHtml = '<table><thead><tr>' + 
+                                '<th scope="col">ID</th>' + 
+                                '<th scope="col">Address</th></tr></thead>'; 
+
+                for (var i = 0, len = ipfsPeers.length; i < len; i++) {
+                    var peerAddr = ipfsPeers[i].addr.toString();
+                    var peerId = ipfsPeers[i].peer._idB58String;
+
+                    modelHtml += '<tbody><tr>' + 
+                                '<th scope="col">' + peerId + '</th>' + 
+                                '<th scope="col">' + peerAddr + '</th></tr></thead>'; 
+                }       
+
+                modelHtml += '</table>';                        
+            } else {
+                var modelHtml = '<p>Not currently connected to any peers</p>';
+            }
+
+            jQuery("#modal-body").html( modelHtml );
+
+        })            
     },
 
     /**
@@ -395,8 +436,14 @@ var planetaryDictator = {
             return planetaryDictator.addIpfsFiles( elmPath, fsElm );
         });
 
+        // Kill the daemon and exit the application
         jQuery(document).on('click','.exit-program', {} ,function(e){
             planetaryDictator.exitProgram();
-        });                                         
+        });       
+
+        // Show the IPFS swarm information
+        jQuery(document).on('click','.show-swarm', {} ,function(e){
+            planetaryDictator.showSwarmPeers();
+        });                                                        
     },
 };

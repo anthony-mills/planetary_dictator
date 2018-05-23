@@ -15,7 +15,7 @@ body {
   background-color: #fff;
   color: #000; }
 
-.body-cover {
+.loading-cover {
   z-index: 5;
   position: fixed;
   padding: 0;

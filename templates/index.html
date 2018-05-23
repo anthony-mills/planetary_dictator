@@ -16,15 +16,16 @@
       planetaryDictator.lsSysDir( userHome );
 
       setTimeout(function() {
+        jQuery('.close-modal').hide();
         getQuote();
-        jQuery('#loading-model').show();
+        jQuery('#notification-model').show();
 
         planetaryDictator.bindClicks();
       }, 500);
     </script>    
   </head>
   <body>
-    <div class="body-cover"></div>
+    <div id="body-cover" class="loading-cover"></div>
 
     <div class="text-center">
       <h2>Planetary Dictator</h2>
@@ -43,7 +44,7 @@
       <div class="col">
         <div>
           <button type="button" class="btn btn-danger exit-program">Shutdown Daemon</button>
-          <button type="button" class="btn btn-primary">Swarm Info</button>
+          <button type="button" class="btn btn-primary show-swarm">Swarm Info</button>
         </div>
 
         <div id="ipfs-status">
@@ -56,14 +57,18 @@
       </div>            
     </div>  
 
-    <div id="loading-model" class="modal" tabindex="-1" role="dialog">
+    <div id="notification-model" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Initialising IPFS Daemon....</h5>
+            <h5 class="modal-title"></h5>
+
+            <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>            
           </div>
           
-          <div class="modal-body" id="space-quote"></div>
+          <div class="modal-body" id="modal-body"></div>
         </div>
       </div>
     </div>  
