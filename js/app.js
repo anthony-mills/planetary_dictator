@@ -43,8 +43,7 @@ ipfsServer.spawn((err, ipfsInfo) => {
         ipfsNode = ipfsAPI({port: ipfsInfo.api.apiPort});
 
         setTimeout(function() {
-            jQuery('.close-model').show();
-            jQuery('#notification-model').hide();
+            jQuery('#notification-modal').hide();
 
             jQuery('.modal-body').html();
             jQuery('.modal-title').html();
@@ -105,7 +104,7 @@ var planetaryDictator = {
               return onError(err)
             }
 
-            jQuery('#notification-model').show();
+            jQuery('#notification-modal').show();
             jQuery(".modal-title").html('Swarm Peers: '  + ipfsPeers.length);
 
             if (ipfsPeers.length > 0) {
@@ -127,6 +126,7 @@ var planetaryDictator = {
                 var modelHtml = '<p>Not currently connected to any peers</p>';
             }
 
+            jQuery('.close-modal').show();
             jQuery("#modal-body").html( modelHtml );
 
         })            
