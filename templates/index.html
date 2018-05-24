@@ -40,23 +40,29 @@
       <div class="col" id="display-ipfs-files"></div>      
     </div>
 
-    <div class="row">
+    <div class="row" id="file-actions">
       <div class="col">
         <div class="action-buttons" id="left-controls"></>
           <button type="button" class="btn btn-danger exit-program">Shutdown Daemon</button>
           <button type="button" class="btn btn-primary show-swarm">Swarm Info</button>
         </div>
 
-        <div id="ipfs-status">
-          <strong>IPFS Status:</strong> Offline
-        </div>
       </div>
 
-      <div class="col" id="action-panel">
+      <div class="col">
         <div class="action-buttons" id="right-controls"></div>        
-        <div id="file-info"></div>
       </div>            
     </div>  
+
+    <div class="row">
+      <div class="col" id="ipfs-status">
+        <strong>IPFS Status:</strong> Offline
+      </div>
+
+      <div class="col" id="action-panel">       
+        <div id="file-info"></div>
+      </div> 
+    </div>
 
     <div id="notification-modal" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">

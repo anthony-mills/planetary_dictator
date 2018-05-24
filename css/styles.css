@@ -32,9 +32,13 @@ body {
 h1, h2 {
   font-family: "Orbitron"; }
 
-.action-buttons {
-  min-height: 40px;
-  padding: 10px 0px 10px; }
+#file-actions {
+  border-bottom: 1px solid #000; }
+  #file-actions .action-buttons {
+    text-align: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 0px 10px; }
 
 .file-browser-panel {
   border-top: 1px solid #000;
