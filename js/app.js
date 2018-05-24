@@ -347,15 +347,15 @@ var planetaryDictator = {
             if (fileDets.isSymbolicLink()) {
                 var objType = 'Link';                
             }            
+
+            jQuery('#right-controls').html('');
+            var htmlStr = '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
+                        'Add to IPFS</button>';
+
+            jQuery('#right-controls').append( htmlStr );   
+
             jQuery('#file-info').html('');
-
-            var htmlStr = '<div  class="action-buttons">' +
-                        '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
-                        'Add to IPFS</button>' +
-                        '</div>';
-
-            jQuery('#file-info').append( htmlStr );   
-
+            
             var htmlStr = '<ul>' + 
                         '<li><strong>Path:</strong> ' + filePath + '</li>' +            
                         '<li><strong>Type:</strong> ' + objType + '</li>' +

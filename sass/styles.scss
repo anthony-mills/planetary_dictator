@@ -51,7 +51,38 @@ h1, h2 {
 }
 
 .action-buttons {
-	padding: 5px 0px 10px;
+	min-height: 40px;
+	padding: 10px 0px 10px;
+}
+
+.file-browser-panel {
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;	
+
+	#display-local-files, #display-ipfs-files {
+		padding: 15px;
+		height:50vh; 
+		overflow-y: scroll;
+
+		li {
+			list-style-type: none;
+			height: 35px;		
+			padding-left: 40px;
+			margin: 0;
+		}
+
+		li.parent-icon {
+			background: url('../img/icons/parent-dir.png')  no-repeat left top;
+	    }    
+
+		li.folder-icon {
+			background: url('../img/icons/folder.png') no-repeat left top;
+	    }
+
+		li.file-icon {
+			background: url('../img/icons/file.png')  no-repeat left top;
+	    }    
+	}	
 }
 
 .boot-quote {
@@ -67,31 +98,6 @@ h1, h2 {
 		float: right;
 		font-size: 90%;
 	}
-}
-
-#display-local-files, #display-ipfs-files {
-	margin: 10px;
-	height:50vh; 
-	overflow-y: scroll;
-
-	li {
-		list-style-type: none;
-		height: 35px;		
-		padding-left: 40px;
-		margin: 0;
-	}
-
-	li.parent-icon {
-		background: url('../img/icons/parent-dir.png')  no-repeat left top;
-    }    
-
-	li.folder-icon {
-		background: url('../img/icons/folder.png') no-repeat left top;
-    }
-
-	li.file-icon {
-		background: url('../img/icons/file.png')  no-repeat left top;
-    }    
 }
 
 .modal-content {

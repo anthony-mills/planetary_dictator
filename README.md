@@ -18,6 +18,12 @@ A lot of work is required, this software is currently sub Alpha. Some of the mor
 * Making the interface somewhat presentable
 * Sorting out how to present objects from directories in the IPFS view
 
+# Screenshots
+
+![Loading screen while IPFS node is starting](/img/screenshots/loading.png?raw=true "IPFS Node Starting")
+
+![File View](/img/screenshots/interface.png?raw=true "Planetary Director File View")
+
 ### Credits
 
 This project is built on a lot of previous hard work by others. Lets stop and give thanks to the following projects:

@@ -33,7 +33,27 @@ h1, h2 {
   font-family: "Orbitron"; }
 
 .action-buttons {
-  padding: 5px 0px 10px; }
+  min-height: 40px;
+  padding: 10px 0px 10px; }
+
+.file-browser-panel {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000; }
+  .file-browser-panel #display-local-files, .file-browser-panel #display-ipfs-files {
+    padding: 15px;
+    height: 50vh;
+    overflow-y: scroll; }
+    .file-browser-panel #display-local-files li, .file-browser-panel #display-ipfs-files li {
+      list-style-type: none;
+      height: 35px;
+      padding-left: 40px;
+      margin: 0; }
+    .file-browser-panel #display-local-files li.parent-icon, .file-browser-panel #display-ipfs-files li.parent-icon {
+      background: url("../img/icons/parent-dir.png") no-repeat left top; }
+    .file-browser-panel #display-local-files li.folder-icon, .file-browser-panel #display-ipfs-files li.folder-icon {
+      background: url("../img/icons/folder.png") no-repeat left top; }
+    .file-browser-panel #display-local-files li.file-icon, .file-browser-panel #display-ipfs-files li.file-icon {
+      background: url("../img/icons/file.png") no-repeat left top; }
 
 .boot-quote {
   color: #333;
@@ -44,22 +64,6 @@ h1, h2 {
     font-style: italic;
     float: right;
     font-size: 90%; }
-
-#display-local-files, #display-ipfs-files {
-  margin: 10px;
-  height: 50vh;
-  overflow-y: scroll; }
-  #display-local-files li, #display-ipfs-files li {
-    list-style-type: none;
-    height: 35px;
-    padding-left: 40px;
-    margin: 0; }
-  #display-local-files li.parent-icon, #display-ipfs-files li.parent-icon {
-    background: url("../img/icons/parent-dir.png") no-repeat left top; }
-  #display-local-files li.folder-icon, #display-ipfs-files li.folder-icon {
-    background: url("../img/icons/folder.png") no-repeat left top; }
-  #display-local-files li.file-icon, #display-ipfs-files li.file-icon {
-    background: url("../img/icons/file.png") no-repeat left top; }
 
 .modal-content {
   border: 1px solid #000;

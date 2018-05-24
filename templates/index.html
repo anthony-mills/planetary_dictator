@@ -32,7 +32,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row file-browser-panel">
       <!-- Display the local file system -->
       <div class="col" id="display-local-files"></div>
 
@@ -42,7 +42,7 @@
 
     <div class="row">
       <div class="col">
-        <div class="action-buttons">
+        <div class="action-buttons" id="left-controls"></>
           <button type="button" class="btn btn-danger exit-program">Shutdown Daemon</button>
           <button type="button" class="btn btn-primary show-swarm">Swarm Info</button>
         </div>
@@ -53,6 +53,7 @@
       </div>
 
       <div class="col" id="action-panel">
+        <div class="action-buttons" id="right-controls"></div>        
         <div id="file-info"></div>
       </div>            
     </div>  
