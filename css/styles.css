@@ -32,6 +32,9 @@ body {
 h1, h2 {
   font-family: "Orbitron"; }
 
+.action-buttons {
+  padding: 5px 0px 10px; }
+
 .boot-quote {
   color: #333;
   font-size: 90%; }
@@ -61,12 +64,12 @@ h1, h2 {
 .modal-content {
   border: 1px solid #000;
   overflow-x: hidden; }
-  .modal-content #modal-body {
+  .modal-content #modal-body .swarm-info {
     max-height: 450px;
     overflow-y: scroll; }
-    .modal-content #modal-body .peer-title {
+    .modal-content #modal-body .swarm-info .peer-title {
       padding: 5px 0px 5px 0px; }
-    .modal-content #modal-body .peer-info {
+    .modal-content #modal-body .swarm-info .peer-info {
       color: #333;
       font-size: 95%; }
 

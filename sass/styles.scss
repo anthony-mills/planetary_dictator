@@ -50,6 +50,10 @@ h1, h2 {
 	font-family: "Orbitron";
 }
 
+.action-buttons {
+	padding: 5px 0px 10px;
+}
+
 .boot-quote {
 	color: #333;
 	font-size: 90%;	
@@ -95,17 +99,20 @@ h1, h2 {
 	overflow-x: hidden;
 
     #modal-body {
-		max-height:450px;
-    	overflow-y:scroll;
 
-		.peer-title {
-			padding: 5px 0px 5px 0px;
-		}
+    	.swarm-info {
+			max-height:450px;
+	    	overflow-y:scroll;
 
-		.peer-info {
-			color: #333;
-			font-size:95%
-		}	
+			.peer-title {
+				padding: 5px 0px 5px 0px;
+			}
+
+			.peer-info {
+				color: #333;
+				font-size:95%
+			}
+    	}	
     }
 }
 

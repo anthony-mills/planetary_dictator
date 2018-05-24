@@ -83,7 +83,7 @@ var planetaryDictator = {
     */
     lsIPFS: function ( ipfsFiles ) {
 
-        jQuery('#display-ipfs-files').html();
+        jQuery('#display-ipfs-files').html('');
 
         for (var i = 0, len = ipfsFiles.length; i < len; i++) {
             if (ipfsFiles[i]) {;
@@ -108,7 +108,7 @@ var planetaryDictator = {
             jQuery(".modal-title").html('Swarm Peers: '  + ipfsPeers.length);
 
             if (ipfsPeers.length > 0) {
-                var modelHtml = ''; 
+                var modelHtml = '<div class="swarm-info">'; 
 
                 for (var i = 0, len = ipfsPeers.length; i < len; i++) {
                     var peerAddr = ipfsPeers[i].addr.toString();
@@ -118,7 +118,9 @@ var planetaryDictator = {
                                 '<div class="peer-info">' + peerId + '</div>' + 
                                 '<div class="peer-title">Peer Address:</div>' +
                                 '<div class="peer-info">' + peerAddr + '</div><hr />'; 
-                }                              
+                }
+
+                modelHtml += '</div>';                              
             } else {
                 var modelHtml = '<p>Not currently connected to any peers</p>';
             }
@@ -219,7 +221,8 @@ var planetaryDictator = {
                             var fileInfo = {
                                 'file_name': fileName,
                                 'ipfs_hash': ipfsResult.hash,
-                                'ipfs_path': ipfsResult.path
+                                'ipfs_path': ipfsResult.path,
+                                'pinned' : false
                             }
 
                             planetaryDictator.storeIpfsObjects( fileInfo );
@@ -244,10 +247,13 @@ var planetaryDictator = {
                     var fileInfo = {
                         'file_name': fsElm,
                         'ipfs_hash': ipfsResult.hash,
-                        'ipfs_path': false
+                        'ipfs_path': false,
+                        'pinned' : false
                     }
                     var currentDate = new Date(); 
-                    fileInfo.time = currentDate.getHours() + ":" + currentDate.getMinutes() + ' ' +
+                    var dateMins = (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes();
+
+                    fileInfo.time = currentDate.getHours() + ":" + dateMins + ' ' +
                                     currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
 
 
@@ -343,6 +349,13 @@ var planetaryDictator = {
             }            
             jQuery('#file-info').html('');
 
+            var htmlStr = '<div  class="action-buttons">' +
+                        '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
+                        'Add to IPFS</button>' +
+                        '</div>';
+
+            jQuery('#file-info').append( htmlStr );   
+
             var htmlStr = '<ul>' + 
                         '<li><strong>Path:</strong> ' + filePath + '</li>' +            
                         '<li><strong>Type:</strong> ' + objType + '</li>' +
@@ -351,11 +364,7 @@ var planetaryDictator = {
                         '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +                       
                         '</ul>';
 
-            jQuery('#file-info').append( htmlStr );
-
-            var htmlStr = '<a href="#" data-name="' + fsElm + '" data-path="'+ filePath +'" class="move-to-ipfs">Add to IPFS</a>';
-
-            jQuery('#file-info').append( htmlStr );                
+            jQuery('#file-info').append( htmlStr );             
 
         });
     },
@@ -427,6 +436,7 @@ var planetaryDictator = {
         }); 
 
         jQuery(document).on('click','.move-to-ipfs', {} ,function(e){
+
             var elmPath = jQuery(this).attr("data-path");
             var fsElm = jQuery(this).attr("data-name");
 
