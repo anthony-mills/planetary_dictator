@@ -108,20 +108,17 @@ var planetaryDictator = {
             jQuery(".modal-title").html('Swarm Peers: '  + ipfsPeers.length);
 
             if (ipfsPeers.length > 0) {
-                var modelHtml = '<table><thead><tr>' + 
-                                '<th scope="col">ID</th>' + 
-                                '<th scope="col">Address</th></tr></thead>'; 
+                var modelHtml = ''; 
 
                 for (var i = 0, len = ipfsPeers.length; i < len; i++) {
                     var peerAddr = ipfsPeers[i].addr.toString();
                     var peerId = ipfsPeers[i].peer._idB58String;
 
-                    modelHtml += '<tbody><tr>' + 
-                                '<th scope="col">' + peerId + '</th>' + 
-                                '<th scope="col">' + peerAddr + '</th></tr></thead>'; 
-                }       
-
-                modelHtml += '</table>';                        
+                    modelHtml += '<div class="peer-title">Peer Id:</div>' +
+                                '<div class="peer-info">' + peerId + '</div>' + 
+                                '<div class="peer-title">Peer Address:</div>' +
+                                '<div class="peer-info">' + peerAddr + '</div><hr />'; 
+                }                              
             } else {
                 var modelHtml = '<p>Not currently connected to any peers</p>';
             }
@@ -444,6 +441,12 @@ var planetaryDictator = {
         // Show the IPFS swarm information
         jQuery(document).on('click','.show-swarm', {} ,function(e){
             planetaryDictator.showSwarmPeers();
-        });                                                        
+        }); 
+
+        // Close the notification modal
+        jQuery(document).on('click','.close-modal', {} ,function(e){
+            jQuery('#notification-modal').hide();
+        });                                                                                                                       
     },
 };
+            

@@ -59,7 +59,16 @@ h1, h2 {
     background: url("../img/icons/file.png") no-repeat left top; }
 
 .modal-content {
-  border: 1px solid #000; }
+  border: 1px solid #000;
+  overflow-x: hidden; }
+  .modal-content #modal-body {
+    max-height: 450px;
+    overflow-y: scroll; }
+    .modal-content #modal-body .peer-title {
+      padding: 5px 0px 5px 0px; }
+    .modal-content #modal-body .peer-info {
+      color: #333;
+      font-size: 95%; }
 
 .save-button:hover {
   background-color: #025ade; }
