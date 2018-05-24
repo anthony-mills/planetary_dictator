@@ -18,6 +18,15 @@ A lot of work is required, this software is currently sub Alpha. Some of the mor
 * Making the interface somewhat presentable
 * Sorting out how to present objects from directories in the IPFS view
 
+### Credits
+
+This project is built on a lot of previous hard work by others. Lets stop and give thanks to the following projects:
+
+* [Electron](https://electronjs.org/)
+* [Interplanetary File System IPFS](https://ipfs.io/)
+* [js-ipfsd-ctl](https://github.com/ipfs/js-ipfsd-ctl)
+* [js-ipfs-api](https://github.com/ipfs/js-ipfs-api)
+* 
 ### Licence
 
 Copyright (C) 2018 [Anthony Mills](http://www.anthony-mills.com)
