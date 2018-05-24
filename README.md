@@ -32,7 +32,7 @@ This project is built on a lot of previous hard work by others. Lets stop and gi
 * [Interplanetary File System IPFS](https://ipfs.io/)
 * [js-ipfsd-ctl](https://github.com/ipfs/js-ipfsd-ctl)
 * [js-ipfs-api](https://github.com/ipfs/js-ipfs-api)
-* 
+
 ### Licence
 
 Copyright (C) 2018 [Anthony Mills](http://www.anthony-mills.com)
