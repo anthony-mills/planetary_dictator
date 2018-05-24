@@ -1,4 +1,4 @@
-=== Planetary Dictator ===
+# Planetary Dictator
 
 ### Description
 
