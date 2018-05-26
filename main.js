@@ -1,13 +1,18 @@
 const electron = require('electron')
-// Module to control application life.
-const app = electron.app
 
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const {app, BrowserWindow, ipcMain} = electron;  
 
 const path = require('path')
 const url = require('url') 
-  
+
+const IPFS = require('ipfs');
+const ipfsFactory = require('ipfsd-ctl');
+const ipfsServer = ipfsFactory.create();
+const ipfsAPI = require('ipfs-api');
+
+var ipfsLib = {};
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -59,15 +64,43 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
 
-  createWindow()
+  createWindow();
+
+  var nodeSettings = {
+      disposable: true,
+      defaultAddrs: true
+  }
+
+  ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
+      
+      ipfsInfo.api.version((err, ipfsVersion) => {
+          if (err) { throw err }
+
+          global.ipfsDetails = {
+            "version" : ipfsVersion.version,
+            "port" : ipfsInfo.api.apiPort
+          }
+
+          ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
+          
+          mainWindow.webContents.send('ipfs-start', true);
+          
+          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);    
+      })  
+  })  
 })
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
+
+  shutdownIpfs();
+
+  var shutElecton = function() {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+      shutdownIpfs();
+    } 
   }
 })
 
@@ -79,5 +112,17 @@ app.on('activate', function () {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+function shutdownIpfs() {
+  if (typeof ipfsLib.stop === "function") {
+    ipfsLib.stop((err) => {
+        if(err) throw err;
+
+        app.quit();
+    });   
+  }
+}
+  
+
+ipcMain.on('shutdown-ipfs', (event, arg) => {  
+  shutdownIpfs();
+});

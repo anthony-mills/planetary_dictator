@@ -5,8 +5,8 @@
 */
 window.jQuery = require('jquery');
 
-const {shell} = require('electron');
-const remote = require('electron').remote;
+const {shell,ipcRenderer, remote} = require('electron');
+//const remote = require('electron').remote;
 
 const os = require('os');
 const fileSystem = require('fs');
@@ -18,53 +18,45 @@ const appStorage = new Store();
 appStorage.set('ipfsFiles', false);
 
 const dir = require('node-dir');
-const IPFS = require('ipfs');
 
 const ipfsAPI = require('ipfs-api');
-const ipfsFactory = require('ipfsd-ctl');
+ipfsLib = {};
 
-const ipfsServer = ipfsFactory.create()
-
-ipfsNode = {};
-
-ipfsServer.spawn((err, ipfsInfo) => {
-    
-    ipfsInfo.api.version((err, ipfsVersion) => {
-        if (err) { throw err }
-
-        console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);
-
-        jQuery("#ipfs-status").html(
-            "<strong>IPFS Status:</strong> Online <br />" +
-            "<strong>Version:</strong> " + ipfsVersion.version + "<br />" +
-            "<strong>Port:</strong> " + ipfsInfo.api.apiPort + "<br />"            
-        );
-
-        ipfsNode = ipfsAPI({port: ipfsInfo.api.apiPort});
-
-        setTimeout(function() {
-            jQuery('#notification-modal').hide();
-
-            jQuery('.modal-body').html();
-            jQuery('.modal-title').html();
-
-            jQuery( ".loading-cover" ).fadeOut( 800 );
-        }, 500);        
-    })
-
-    
-})  
 
 var planetaryDictator = {
+
+    /**
+    * Monitor the status of IPFS node and change state when ready
+    *
+    */
+    checkNode: function() {
+        ipcRenderer.on('ipfs-start', (event, arg) => { 
+            ipfsLib = ipfsAPI({port: remote.getGlobal('ipfsDetails').port});
+
+            jQuery("#ipfs-status").html(
+              "<strong>IPFS Status:</strong> Online <br />" +
+              "<strong>Version:</strong> " + remote.getGlobal('ipfsDetails').version + "<br />" +
+              "<strong>Port:</strong> " + remote.getGlobal('ipfsDetails').port + "<br />"            
+            );
+
+            setTimeout(function() {
+              jQuery('#notification-modal').hide();
+
+              jQuery('.modal-body').html();
+              jQuery('.modal-title').html();
+
+              jQuery( ".loading-cover" ).fadeOut( 800 );
+            }, 500);            
+           
+        }); 
+    },
 
     /**
     * Shutdown the IPFS daemon and exit the program
     *
     */
     exitProgram: function() {
-        ipfsNode.shutdown();
-
-        remote.getCurrentWindow().close()
+        ipcRenderer.send('shutdown-ipfs', 1);
     },
 
     /**
@@ -213,7 +205,7 @@ var planetaryDictator = {
                         path : dirElm + fileName
                     }    
 
-                    ipfsNode.files.add(fileObj, (err, res) => {
+                    ipfsLib.files.add(fileObj, (err, res) => {
 
                         if (!err) {
                             var ipfsResult = res.shift();
@@ -239,7 +231,7 @@ var planetaryDictator = {
                     content: fileSystem.createReadStream( filePath )
                 }
 
-                ipfsNode.files.add(fileObj, (err, res) => {
+                ipfsLib.files.add(fileObj, (err, res) => {
                    if(err) throw err;
 
                     var ipfsResult = res.shift();
@@ -304,10 +296,25 @@ var planetaryDictator = {
     * @param integer ipfsElm
     **/
     ipfsObj: function( ipfsElm ) {
+
         var ipfsFiles = appStorage.get('ipfsFiles');
-        var ipfsFile = ipfsFiles[0];
+        var ipfsFile = ipfsFiles[ipfsElm];
         
         console.log(ipfsFile);
+        jQuery('#right-controls').html('');
+
+        var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
+
+        if (ipfsFile.pinned) {
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary">Unpin File</button>';
+            var pinStatus = '<li><strong>Pinned:</strong> True</li>';
+        } else {
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary">Pin File</button>';
+            var pinStatus = '<li><strong>Pinned:</strong> False</li>';
+        }                   
+
+        jQuery('#right-controls').html( htmlStr );
+
         jQuery('#file-info').html('');
 
         var ipfsGateway = '<a class="open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">' +
@@ -316,7 +323,8 @@ var planetaryDictator = {
         var htmlStr = '<ul>' + 
                     '<li><strong>Filename:</strong> ' + ipfsFile.file_name + '</li>' +            
                     '<li><strong>Hash:</strong> ' + ipfsGateway + '</li>' +
-                    '<li><strong>Added:</strong> ' + ipfsFile.time + '</li>' +                     
+                    '<li><strong>Added:</strong> ' + ipfsFile.time + '</li>' + 
+                    pinStatus +                     
                     '</ul>';
 
         jQuery('#file-info').append( htmlStr );               
@@ -355,7 +363,7 @@ var planetaryDictator = {
             jQuery('#right-controls').append( htmlStr );   
 
             jQuery('#file-info').html('');
-            
+
             var htmlStr = '<ul>' + 
                         '<li><strong>Path:</strong> ' + filePath + '</li>' +            
                         '<li><strong>Type:</strong> ' + objType + '</li>' +
@@ -410,6 +418,9 @@ var planetaryDictator = {
         });               
 
         jQuery(document).on('click','.ipfs-element', {} ,function(e){
+            // Clear any action buttons already in the panel
+            jQuery("#right-controls").html('');
+
             var ipfsElm = jQuery(this).attr("data-ipfs-elm");
 
             planetaryDictator.ipfsObj( ipfsElm );
