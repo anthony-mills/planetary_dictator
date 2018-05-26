@@ -19,7 +19,7 @@
         jQuery('.close-modal').hide();
         getQuote();
         jQuery('#notification-modal').show();
-        
+
         planetaryDictator.checkNode();
         planetaryDictator.bindClicks();
       }, 500);
@@ -60,8 +60,14 @@
     </div>  
 
     <div class="row">
-      <div class="col" id="ipfs-status">
-        <strong>IPFS Status:</strong> Offline
+      <div class="col">
+        <!-- Show the status, version and port of the IPFS node -->
+        <div id="ipfs-status">
+          <strong>IPFS Status:</strong> Offline
+        </div>
+
+        <!-- Show bandwidth stats etc for the IPFS node -->
+        <div id="ipfs-stats"></div>
       </div>
 
       <div class="col" id="action-panel">       

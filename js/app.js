@@ -15,11 +15,13 @@ const userHome = require('user-home');
 
 const Store = require('electron-store');
 const appStorage = new Store();
+const formatBytes = require('bytes');
+
 appStorage.set('ipfsFiles', false);
 
 const dir = require('node-dir');
-
 const ipfsAPI = require('ipfs-api');
+
 ipfsLib = {};
 
 
@@ -38,6 +40,30 @@ var planetaryDictator = {
               "<strong>Version:</strong> " + remote.getGlobal('ipfsDetails').version + "<br />" +
               "<strong>Port:</strong> " + remote.getGlobal('ipfsDetails').port + "<br />"            
             );
+
+            var updateNode = function() {
+                ipfsLib.stats.bw((err, stats) => {
+                    jQuery("#ipfs-stats").html('');
+
+                    jQuery("#ipfs-stats").html(
+                        "<ul>" +
+                        "<li><strong>Total In:</strong> " + formatBytes( Number(stats.totalIn.toFixed(2)) ) + "</li>" +
+                        "<li><strong>Total Out:</strong> " + formatBytes( Number(stats.totalOut.toFixed(2)) ) + "</li>" +
+                        "<li><strong>Rate In:</strong> " + formatBytes( Number(stats.rateIn.toFixed(2)) ) + "/S</li>" +
+                        "<li><strong>Rate Out:</strong> " + formatBytes( Number(stats.rateOut.toFixed(2)) ) + "/S</li>" +
+                        "</ul>"  
+                    );
+
+                    
+                    var totalIn = Number(stats.totalIn.toFixed(2));
+                    var totalOut = Number(stats.totalOut.toFixed(2));
+                    var rateIn = Number(stats.rateIn.toFixed(2));
+                    var rateOut = Number(stats.rateOut.toFixed(2));                    
+                    
+                });
+            }
+
+            setInterval(updateNode, 1000);
 
             setTimeout(function() {
               jQuery('#notification-modal').hide();
