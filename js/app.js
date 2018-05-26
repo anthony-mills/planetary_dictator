@@ -35,13 +35,19 @@ var planetaryDictator = {
         ipcRenderer.on('ipfs-start', (event, arg) => { 
             ipfsLib = ipfsAPI({port: remote.getGlobal('ipfsDetails').port});
 
-            jQuery("#ipfs-status").html(
-              "<strong>IPFS Status:</strong> Online <br />" +
-              "<strong>Version:</strong> " + remote.getGlobal('ipfsDetails').version + "<br />" +
-              "<strong>Port:</strong> " + remote.getGlobal('ipfsDetails').port + "<br />"            
-            );
-
             var updateNode = function() {
+                ipfsLib.repo.stat((err, stats) => {
+                    jQuery("#ipfs-status").html('');
+
+                    jQuery("#ipfs-status").html(
+                      "<strong>IPFS Status:</strong> Online <br />" +
+                      "<strong>Version:</strong> " + remote.getGlobal('ipfsDetails').version + "<br />" +
+                      "<strong>Port:</strong> " + remote.getGlobal('ipfsDetails').port + "<br />" +
+                      "<strong>Repo Objects:</strong> " + Number(stats.numObjects.toFixed(2)) + "<br />" + 
+                      "<strong>Size:</strong> " + formatBytes( Number(stats.repoSize.toFixed(2)) ) + "<br />"                                                            
+                    );
+                });
+
                 ipfsLib.stats.bw((err, stats) => {
                     jQuery("#ipfs-stats").html('');
 
