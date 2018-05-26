@@ -52,11 +52,26 @@ var planetaryDictator = {
     },
 
     /**
-    * Shutdown the IPFS daemon and exit the program
+    * Pin / Upin file to the node
     *
+    * @param integer fileId
     */
-    exitProgram: function() {
-        ipcRenderer.send('shutdown-ipfs', 1);
+    pinFile: function( fileId ) {
+        var ipfsFiles = appStorage.get('ipfsFiles');
+
+        var pinStatus = ipfsFiles[fileId].pinned;
+
+        if (pinStatus) {
+            ipfsLib.pin.rm(ipfsFiles[fileId].ipfs_hash, function (err) {})
+            ipfsFiles[fileId].pinned = false;
+        } else {
+            ipfsLib.pin.add(ipfsFiles[fileId].ipfs_hash, function (err) {});
+            ipfsFiles[fileId].pinned = true;            
+        }
+
+        appStorage.set('ipfsFiles', ipfsFiles);
+
+        this.ipfsObj( fileId );      
     },
 
     /**
@@ -217,7 +232,7 @@ var planetaryDictator = {
                                 'pinned' : false
                             }
 
-                            planetaryDictator.storeIpfsObjects( fileInfo );
+                            this.storeIpfsObjects( fileInfo );
                         }
 
                     });                    
@@ -249,7 +264,7 @@ var planetaryDictator = {
                                     currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
 
 
-                    planetaryDictator.storeIpfsObjects( fileInfo );
+                    this.storeIpfsObjects( fileInfo );
                 });
             }       
         });    
@@ -300,16 +315,16 @@ var planetaryDictator = {
         var ipfsFiles = appStorage.get('ipfsFiles');
         var ipfsFile = ipfsFiles[ipfsElm];
         
-        console.log(ipfsFile);
         jQuery('#right-controls').html('');
 
+        console.log( ipfsFile );
         var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
 
         if (ipfsFile.pinned) {
-            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary">Unpin File</button>';
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary pin-file">Unpin File</button>';
             var pinStatus = '<li><strong>Pinned:</strong> True</li>';
         } else {
-            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary">Pin File</button>';
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary pin-file">Pin File</button>';
             var pinStatus = '<li><strong>Pinned:</strong> False</li>';
         }                   
 
@@ -456,12 +471,19 @@ var planetaryDictator = {
 
         // Kill the daemon and exit the application
         jQuery(document).on('click','.exit-program', {} ,function(e){
-            planetaryDictator.exitProgram();
+            ipcRenderer.send('shutdown-ipfs', 1);
         });       
 
         // Show the IPFS swarm information
         jQuery(document).on('click','.show-swarm', {} ,function(e){
             planetaryDictator.showSwarmPeers();
+        }); 
+
+        // Pin a file in the node
+        jQuery(document).on('click','.pin-file', {} ,function(e){
+            var fileId = jQuery(this).attr("data-ipfs-elm");
+
+            planetaryDictator.pinFile( fileId );
         }); 
 
         // Close the notification modal
