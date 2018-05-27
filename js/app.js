@@ -84,6 +84,21 @@ var planetaryDictator = {
     },
 
     /**
+    * Show an alert message
+    *
+    * @param string alertMsg
+    */
+    showAlert: function( alertMsg ) {
+        jQuery(".alert-panel").html(alertMsg);
+        jQuery(".alert-panel").show();
+
+        setTimeout(function() {
+            jQuery( ".alert-panel" ).fadeOut( 800 );
+        }, 3000);          
+        
+    },
+
+    /**
     * Pin / Upin file to the node
     *
     * @param integer fileId
@@ -509,6 +524,13 @@ var planetaryDictator = {
         // Show the IPFS swarm information
         jQuery(document).on('click','.show-swarm', {} ,function(e){
             planetaryDictator.showSwarmPeers();
+        }); 
+
+        // Run the garbage collector
+        jQuery(document).on('click','.run-garbage-collection', {} ,function(e){
+            ipfsLib.repo.gc((err, res) => console.log(res))
+
+            planetaryDictator.showAlert("Running the garbage collector.");
         }); 
 
         // Pin a file in the node

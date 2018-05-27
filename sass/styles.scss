@@ -66,6 +66,16 @@ h1, h2 {
 
 }
 
+.alert-panel {
+	width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+    align-items: center;
+    justify-content: space-around;
+    display: none;
+    float: none;
+    margin-bottom: 50px;	
+}
 
 .file-browser-panel {
 	border-top: 1px solid #000;
