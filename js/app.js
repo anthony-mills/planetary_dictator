@@ -9,7 +9,7 @@ const {shell,ipcRenderer, remote} = require('electron');
 //const remote = require('electron').remote;
 
 const os = require('os');
-const fileSystem = require('fs');
+const fileSystem = require('promise-fs');
 const path = require('path');
 const userHome = require('user-home');
 
@@ -119,15 +119,6 @@ var planetaryDictator = {
         appStorage.set('ipfsFiles', ipfsFiles);
 
         this.ipfsObj( fileId );      
-    },
-
-    /**
-    * Open a file using the system default associated application
-    *
-    * @param string filePath
-    */
-    openFile: function( filePath ) {
-        shell.openItem( filePath );
     },
 
     /**
@@ -394,52 +385,6 @@ var planetaryDictator = {
     },
 
     /**
-    * Get the file info for a file or directory on the local filesystem
-    *
-    * @param string filePath
-    * @param string fsElm
-    **/
-    fileInfo: function( filePath, fsElm ) {
-
-        fileSystem.stat( filePath, (readErr, fileDets) => {
-            var filePerms = '0' + (fileDets.mode & 0777).toString(8)
-
-            var objType = 'Unknown';
-
-            if (fileDets.isDirectory()) {
-                var objType = 'Directory';                
-            }
-
-            if (fileDets.isFile()) {
-                var objType = 'File';                
-            }
-
-            if (fileDets.isSymbolicLink()) {
-                var objType = 'Link';                
-            }            
-
-            jQuery('#right-controls').html('');
-            var htmlStr = '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
-                        'Add to IPFS</button>';
-
-            jQuery('#right-controls').append( htmlStr );   
-
-            jQuery('#file-info').html('');
-
-            var htmlStr = '<ul>' + 
-                        '<li><strong>Path:</strong> ' + filePath + '</li>' +            
-                        '<li><strong>Type:</strong> ' + objType + '</li>' +
-                        '<li><strong>Size:</strong> ' + fileDets.size + ' bytes</li>' +
-                        '<li><strong>Permissions:</strong> ' + filePerms + '</li>' +
-                        '<li><strong>Created:</strong> ' + fileDets.birthtime.toLocaleString() + '</li>' +                       
-                        '</ul>';
-
-            jQuery('#file-info').append( htmlStr );             
-
-        });
-    },
-
-    /**
     * Control the submission and saving of the application settings
     **/
     settingsForm: function() {
@@ -460,6 +405,35 @@ var planetaryDictator = {
     },
 
     /**
+    * Display the details for a file or directory on the local filesystem
+    *
+    * @param string filePath
+    * @param string fsElm
+    **/
+    showFileInfo: function( filePath, fsElm ) {
+
+        localFs.fileInfo( filePath, fsElm ).then(function( fileDets ) {
+            jQuery('#right-controls').html('');
+            var htmlStr = '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
+                        'Add to IPFS</button>';
+
+            jQuery('#right-controls').append( htmlStr );   
+
+            jQuery('#file-info').html('');
+
+            var htmlStr = '<ul>' + 
+                        '<li><strong>Path:</strong> ' + fileDets.file_path + '</li>' +            
+                        '<li><strong>Type:</strong> ' + fileDets.obj_type + '</li>' +
+                        '<li><strong>Size:</strong> ' + fileDets.file_size + ' bytes</li>' +
+                        '<li><strong>Permissions:</strong> ' + fileDets.file_perms + '</li>' +
+                        '<li><strong>Created:</strong> ' + fileDets.file_created + '</li>' +                       
+                        '</ul>';
+
+            jQuery('#file-info').append( htmlStr );
+        }); 
+    },
+
+    /**
     * Bind the required click handlers to deal with the JS actions 
     * on the main screen of the application
     **/
@@ -473,9 +447,9 @@ var planetaryDictator = {
             var isParent = jQuery(this).hasClass( "parent-icon" );
 
             if (isFolder || isParent) {
-              planetaryDictator.fileInfo( elmPath, fsElm );
+              planetaryDictator.showFileInfo( elmPath, fsElm );
             } else {
-              planetaryDictator.fileInfo( elmPath, fsElm );
+              planetaryDictator.showFileInfo( elmPath, fsElm );
             }
         });               
 
@@ -496,14 +470,14 @@ var planetaryDictator = {
             if (isFolder || isParent ) {
               planetaryDictator.lsSysDir( elmPath, true );
             } else {
-              planetaryDictator.openFile( elmPath );                
+              localFs.openFile( elmPath );                
             }
         }); 
 
         jQuery(document).on('click','.open-external', {} ,function(e){
             var linkLocation = jQuery(this).attr('href');
 
-            planetaryDictator.openFile( linkLocation );
+            localFs.openFile( linkLocation );
 
             e.preventDefault()
         }); 
