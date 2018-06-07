@@ -13,6 +13,8 @@ const fileSystem = require('promise-fs');
 const path = require('path');
 const userHome = require('user-home');
 
+const localFs = require('../js/modules/local_fs.js');
+
 const Store = require('electron-store');
 const appStorage = new Store();
 const formatBytes = require('bytes');

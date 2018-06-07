@@ -2,7 +2,7 @@
 /**
 * Handle planetary dicatator functionality when dealing with the local filesystem
 */
-var localFs = {
+exports.localFs = {
     /**
     * Open a file using the system default associated application
     *
