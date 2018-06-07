@@ -61,7 +61,7 @@ var spaceQuotes = [
 	}													
 ]
 
-var getQuote = function() {
+exports.getQuote = function() {
 	var spaceQuote = spaceQuotes[Math.floor(Math.random()*spaceQuotes.length)];
 	var modalTitle = 'Initialising IPFS Daemon....';
 	jQuery(".modal-title").html(modalTitle);

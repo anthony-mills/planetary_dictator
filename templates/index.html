@@ -9,7 +9,6 @@
 
     <script src="../js/app.js"></script>
     <script src="../js/local_fs.js"></script>    
-    <script src="../js/quotes.js"></script>
 
     <title>Planetary Dictator</title>
 
@@ -18,7 +17,11 @@
 
       setTimeout(function() {
         jQuery('.close-modal').hide();
-        getQuote();
+
+        const quoteModule = require('../js/modules/quotes.js');
+
+        quoteModule.getQuote();
+
         jQuery('#notification-modal').show();
 
         planetaryDictator.checkNode();
@@ -77,7 +80,7 @@
       </div> 
     </div>
 
-    <div class="alert alert-success fixed-bottom alert-panel" role="alert">dk</div>
+    <div class="alert alert-success fixed-bottom alert-panel" role="alert"></div>
 
     <div id="notification-modal" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
