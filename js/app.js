@@ -21,7 +21,7 @@ const formatBytes = require('bytes');
 
 appStorage.set('ipfsFiles', false);
 
-const dir = require('node-dir');
+const nodeDir = require('node-dir');
 const ipfsAPI = require('ipfs-api');
 
 ipfsLib = {};
@@ -129,6 +129,7 @@ var planetaryDictator = {
     * @param array ipfsFiles
     */
     lsIPFS: function ( ipfsFiles ) {
+        console.log( ipfsFiles );
 
         jQuery('#display-ipfs-files').html('');
 
@@ -137,6 +138,8 @@ var planetaryDictator = {
                 var htmlStr = '<li class="ipfs-element file-icon" data-ipfs-elm="' + i + '">' +
                             '<a href="#">' + ipfsFiles[i].file_name + '</a></li>';
                 jQuery('#display-ipfs-files').append( htmlStr );
+            } else {
+
             }
 
         }        
@@ -146,7 +149,7 @@ var planetaryDictator = {
     * Show the swarm peers
     */
     showSwarmPeers: function () {
-        ipfsNode.swarm.peers((err, ipfsPeers) => {
+        ipfsLib.swarm.peers((err, ipfsPeers) => {
             if (err) {
               return onError(err)
             }
@@ -242,42 +245,34 @@ var planetaryDictator = {
             * add the files to the IPFS node
             * 
             **/
+
             if (fileDets.isDirectory()) { 
+                var ipfsBase = path.basename( filePath );
 
-                function readDir( dirPath ) {
-                    return fileSystem.statSync(dirPath).isDirectory()
-                        ? Array.prototype.concat(...fileSystem.readdirSync(dirPath).map(f => readDir(path.join(dirPath, f))))
-                        : dirPath;
-                }
+                nodeDir.files(filePath, function(err, fileArr) {
+                    console.log(err);
+                
+                    var ipfsFiles = [];
+                    for (var i=0; i < fileArr.length; i++) {
+                        console.log( fileArr[i] );
+                        var ipfsPath = fileArr[i].replace( filePath, '');
+                        console.log(ipfsPath);
+                        ipfsFiles.push({
+                            path: ipfsPath,
+                            content: fileSystem.createReadStream( fileArr[i] )                            
+                        });
 
-                var dirStruct = readDir(filePath);
-     
-                for (var i = 0; i < dirStruct.length ; i++) {
-                    var fileName = path.basename( dirStruct[i] );
-                    var dirElm = path.dirname(fsElm + "/" + path.relative(filePath, dirStruct[i])) + "/";
+                    }
 
-                    var fileObj = {
-                        path : dirElm + fileName
-                    }    
+                    console.log(ipfsFiles);
 
-                    ipfsLib.files.add(fileObj, (err, res) => {
+                    ipfsLib.files.add(ipfsFiles, { recursive: true, wrapWithDirectory: true}, (err, res) => {
+                        console.log(err);
 
-                        if (!err) {
-                            var ipfsResult = res.shift();
+                        console.log( res );
+                    });
+                })       
 
-                            var fileInfo = {
-                                'file_name': fileName,
-                                'ipfs_hash': ipfsResult.hash,
-                                'ipfs_path': ipfsResult.path,
-                                'pinned' : false
-                            }
-
-                            this.storeIpfsObjects( fileInfo );
-                        }
-
-                    });                    
-                }
-          
             }
 
             if (fileDets.isFile()) { 
