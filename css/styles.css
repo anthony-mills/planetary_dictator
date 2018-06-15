@@ -84,6 +84,10 @@ h1, h2 {
 .modal-content {
   border: 1px solid #000;
   overflow-x: hidden; }
+  .modal-content #modal-body .loading-msg {
+    padding: 20px; }
+  .modal-content #modal-body .loading-animation {
+    padding: 10px 0px 20px 0px; }
   .modal-content #modal-body .swarm-info {
     max-height: 450px;
     overflow-y: scroll; }

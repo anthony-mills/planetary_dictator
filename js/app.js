@@ -74,6 +74,7 @@ var planetaryDictator = {
             setInterval(updateNode, 1000);
 
             setTimeout(function() {
+              jQuery(".modal-header").show();
               jQuery('#notification-modal').hide();
 
               jQuery('.modal-body').html();

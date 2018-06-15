@@ -27,6 +27,7 @@ body {
 	color: $txtColour;
 }	
 
+// Start loading state related styles
 .loading-cover
 {
 	z-index: 5;
@@ -45,6 +46,9 @@ body {
     background-repeat: no-repeat;
     background-position: left center;
 }
+
+
+// End loading state related styles
 
 h1, h2 {
 	font-family: "Orbitron";
@@ -127,6 +131,13 @@ h1, h2 {
 	overflow-x: hidden;
 
     #modal-body {
+    	.loading-msg {
+    		padding: 20px;
+    	}
+
+    	.loading-animation {
+    		padding: 10px 0px 20px 0px;
+    	}
 
     	.swarm-info {
 			max-height:450px;
