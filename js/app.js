@@ -129,19 +129,20 @@ var planetaryDictator = {
     * @param array ipfsFiles
     */
     lsIPFS: function ( ipfsFiles ) {
-        console.log( ipfsFiles );
 
         jQuery('#display-ipfs-files').html('');
 
         for (var i = 0, len = ipfsFiles.length; i < len; i++) {
-            if (ipfsFiles[i]) {;
-                var htmlStr = '<li class="ipfs-element file-icon" data-ipfs-elm="' + i + '">' +
+            if (ipfsFiles[i]) {
+                if (ipfsFiles[i].is_file) {
+                    var htmlStr = '<li class="ipfs-element file-icon" data-ipfs-elm="' + i + '">' +
                             '<a href="#">' + ipfsFiles[i].file_name + '</a></li>';
+                } else {
+                    var htmlStr = '<li class="ipfs-element folder-icon" data-ipfs-elm="' + i + '">' +
+                                '<a href="#">' + ipfsFiles[i].file_name + '</a></li>';
+                }
                 jQuery('#display-ipfs-files').append( htmlStr );
-            } else {
-
-            }
-
+            } 
         }        
     },
 
@@ -256,7 +257,7 @@ var planetaryDictator = {
                     for (var i=0; i < fileArr.length; i++) {
                         console.log( fileArr[i] );
                         var ipfsPath = fileArr[i].replace( filePath, '');
-                        console.log(ipfsPath);
+
                         ipfsFiles.push({
                             path: ipfsPath,
                             content: fileSystem.createReadStream( fileArr[i] )                            
@@ -264,12 +265,17 @@ var planetaryDictator = {
 
                     }
 
-                    console.log(ipfsFiles);
-
                     ipfsLib.files.add(ipfsFiles, { recursive: true, wrapWithDirectory: true}, (err, res) => {
                         console.log(err);
 
                         console.log( res );
+                        var ipfsResult = res[res.length - 1];
+
+                        console.log( ipfsResult );
+
+                        planetaryDictator.storeIpfsObjects( 
+                            { name: fsElm, hash: ipfsResult.hash, is_file: false } 
+                        );
                     });
                 })       
 
@@ -282,24 +288,13 @@ var planetaryDictator = {
                 }
 
                 ipfsLib.files.add(fileObj, (err, res) => {
-                   if(err) throw err;
+                    if(err) throw err;
 
                     var ipfsResult = res.shift();
 
-                    var fileInfo = {
-                        'file_name': fsElm,
-                        'ipfs_hash': ipfsResult.hash,
-                        'ipfs_path': false,
-                        'pinned' : false
-                    }
-                    var currentDate = new Date(); 
-                    var dateMins = (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes();
-
-                    fileInfo.time = currentDate.getHours() + ":" + dateMins + ' ' +
-                                    currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
-
-
-                    this.storeIpfsObjects( fileInfo );
+                    this.storeIpfsObjects( 
+                        { name: fsElm, hash: ipfsResult.hash, is_file: true } 
+                    );
                 });
             }       
         });    
@@ -308,9 +303,23 @@ var planetaryDictator = {
     /** 
     * Store the details of a file added to IPFS for future reference
     *
-    * @param object uploadedFile
+    * @param object fileObj
     **/
-    storeIpfsObjects: function( uploadedFile ) {
+    storeIpfsObjects: function( fileObj ) {
+        var uploadedFile = {
+            'file_name': fileObj.name,
+            'ipfs_hash': fileObj.hash,
+            'ipfs_path': false,
+            'is_file' : fileObj.is_file,
+            'pinned' : false
+        }
+
+        var currentDate = new Date(); 
+        var dateMins = (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes();
+
+        uploadedFile.time = currentDate.getHours() + ":" + dateMins + ' ' +
+                        currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
+
         var ipfsFiles = appStorage.get('ipfsFiles');
 
         if (!ipfsFiles) {
@@ -339,6 +348,7 @@ var planetaryDictator = {
         appStorage.set('ipfsFiles', ipfsFiles);
 
     }, 
+
 
     /**
     * Get the information for an IPFS object
