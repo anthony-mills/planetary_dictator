@@ -96,7 +96,7 @@ h1, h2 {
 
 	#display-local-files, #display-ipfs-files {
 		padding: 15px;
-		height:50vh; 
+		height:45vh; 
 		overflow-y: scroll;
 
 		li {
@@ -125,6 +125,12 @@ h1, h2 {
 	color: $bgColour;
 }
 
+.info-panel {
+	margin: 5px 15px 5px 15px;
+	padding: 5px 15px 5px 15px;
+	border: 1px solid;
+}
+
 .boot-quote {
 	color: #333;
 	font-size: 90%;	
@@ -144,7 +150,7 @@ h1, h2 {
 
 #notification-modal {
 	color: $bgColour !important;
-		
+
 	.modal-content {
 		border: 1px solid #000;
 		overflow-x: hidden;

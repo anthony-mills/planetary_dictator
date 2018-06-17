@@ -42,6 +42,7 @@ var planetaryDictator = {
                     jQuery("#ipfs-status").html('');
 
                     jQuery("#ipfs-status").html(
+                      '<div class="text-center">Node Info</div>' + 
                       "<strong>IPFS Status:</strong> Online <br />" +
                       "<strong>Version:</strong> " + remote.getGlobal('ipfsDetails').version + "<br />" +
                       "<strong>Port:</strong> " + remote.getGlobal('ipfsDetails').port + "<br />" +
@@ -54,12 +55,11 @@ var planetaryDictator = {
                     jQuery("#ipfs-stats").html('');
 
                     jQuery("#ipfs-stats").html(
-                        "<ul>" +
-                        "<li><strong>Total In:</strong> " + formatBytes( Number(stats.totalIn.toFixed(2)) ) + "</li>" +
-                        "<li><strong>Total Out:</strong> " + formatBytes( Number(stats.totalOut.toFixed(2)) ) + "</li>" +
-                        "<li><strong>Rate In:</strong> " + formatBytes( Number(stats.rateIn.toFixed(2)) ) + "/S</li>" +
-                        "<li><strong>Rate Out:</strong> " + formatBytes( Number(stats.rateOut.toFixed(2)) ) + "/S</li>" +
-                        "</ul>"  
+                        '<div class="text-center">Bandwidth Stats</div>' +
+                        "<strong>Total In:</strong> " + formatBytes( Number(stats.totalIn.toFixed(2)) ) + "<br />" +
+                        "<strong>Total Out:</strong> " + formatBytes( Number(stats.totalOut.toFixed(2)) ) + "<br />" +
+                        "<strong>Rate In:</strong> " + formatBytes( Number(stats.rateIn.toFixed(2)) ) + "/S<br />" +
+                        "<strong>Rate Out:</strong> " + formatBytes( Number(stats.rateOut.toFixed(2)) ) + "/S<br />"
                     );
 
                     
@@ -272,10 +272,7 @@ var planetaryDictator = {
                     ipfsLib.files.add(ipfsFiles, { recursive: true, wrapWithDirectory: true}, (err, res) => {
                         console.log(err);
 
-                        console.log( res );
                         var ipfsResult = res[res.length - 1];
-
-                        console.log( ipfsResult );
 
                         planetaryDictator.storeIpfsObjects( 
                             { name: fsElm, hash: ipfsResult.hash, is_file: false } 
@@ -318,11 +315,7 @@ var planetaryDictator = {
             'pinned' : false
         }
 
-        var currentDate = new Date(); 
-        var dateMins = (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes();
-
-        uploadedFile.time = currentDate.getHours() + ":" + dateMins + ' ' +
-                        currentDate.getDate() + "/" + (currentDate.getMonth()+1)  + "/" + currentDate.getFullYear();
+        uploadedFile.time = planetaryDictator.formatDate( new Date() );
 
         var ipfsFiles = appStorage.get('ipfsFiles');
 
@@ -371,10 +364,10 @@ var planetaryDictator = {
 
         if (ipfsFile.pinned) {
             htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal pin-file">Unpin File</button>';
-            var pinStatus = '<li><strong>Pinned:</strong> True</li>';
+            var pinStatus = '<strong>Pinned:</strong> True<br />';
         } else {
             htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal pin-file">Pin File</button>';
-            var pinStatus = '<li><strong>Pinned:</strong> False</li>';
+            var pinStatus = '<strong>Pinned:</strong> False<br />';
         }                   
 
         jQuery('#right-controls').html( htmlStr );
@@ -384,12 +377,19 @@ var planetaryDictator = {
         var ipfsGateway = '<a class="open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">' +
                         ipfsFile.ipfs_hash + '</a>';
 
-        var htmlStr = '<ul>' + 
-                    '<li><strong>Filename:</strong> ' + ipfsFile.file_name + '</li>' +            
-                    '<li><strong>Hash:</strong> ' + ipfsGateway + '</li>' +
-                    '<li><strong>Added:</strong> ' + ipfsFile.time + '</li>' + 
+        if ( ipfsFile.is_file ) {
+            var objType = '<strong>Object Type:</strong> File<br />'; 
+        } else {
+            var objType = '<strong>Object Type:</strong> Directory<br />';
+        }
+
+        var htmlStr = '<div class="rounded info-panel">' + 
+                    '<div class="text-center">Object Info</div>' +
+                    '<strong>IPFS Hash:</strong> ' + ipfsGateway + '<br />' +
+                    '<strong>Original Filename:</strong> ' + ipfsFile.file_name + '<br />' +            
+                    '<strong>Added:</strong> ' + ipfsFile.time + '<br />' + 
                     pinStatus +                     
-                    '</ul>';
+                    '</div>';
 
         jQuery('#file-info').append( htmlStr );               
 
@@ -424,6 +424,8 @@ var planetaryDictator = {
     showFileInfo: function( filePath, fsElm ) {
 
         localFs.fileInfo( filePath, fsElm ).then(function( fileDets ) {
+            var fileCreate = planetaryDictator.formatDate( new Date(fileDets.file_created) );
+
             jQuery('#right-controls').html('');
             var htmlStr = '<button type="button" class="btn btn-terminal move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
                         'Add to IPFS</button>';
@@ -432,16 +434,34 @@ var planetaryDictator = {
 
             jQuery('#file-info').html('');
 
-            var htmlStr = '<ul>' + 
-                        '<li><strong>Path:</strong> ' + fileDets.file_path + '</li>' +            
-                        '<li><strong>Type:</strong> ' + fileDets.obj_type + '</li>' +
-                        '<li><strong>Size:</strong> ' + fileDets.file_size + ' bytes</li>' +
-                        '<li><strong>Permissions:</strong> ' + fileDets.file_perms + '</li>' +
-                        '<li><strong>Created:</strong> ' + fileDets.file_created + '</li>' +                       
-                        '</ul>';
+            var htmlStr =  '<div class="rounded info-panel">' + 
+                        '<div class="text-center">Object Info</div>' +
+                        '<strong>Path:</strong> ' + fileDets.file_path + '<br />' +            
+                        '<strong>Type:</strong> ' + fileDets.obj_type + '<br />' +
+                        '<strong>Size:</strong> ' + fileDets.file_size + ' bytes<br />' +
+                        '<strong>Permissions:</strong> ' + fileDets.file_perms + '<br />' +
+                        '<strong>Created:</strong> ' + fileCreate + '<br />' +                       
+                        '</div>';
 
             jQuery('#file-info').append( htmlStr );
         }); 
+    },
+
+    formatDate: function( dateObj)
+    {
+
+        var hours = dateObj.getHours();
+        var minutes = dateObj.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        
+        hours = hours % 12;
+        hours = hours ? hours : 12; 
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+
+        var dateStr = dateObj.getDate() + "/" + (dateObj.getMonth()+1)  + "/" + dateObj.getFullYear();
+        var strTime = dateStr + ' ' + hours + ':' + minutes + ' ' + ampm;
+
+        return strTime;
     },
 
     /**
@@ -503,6 +523,8 @@ var planetaryDictator = {
 
         // Kill the daemon and exit the application
         jQuery(document).on('click','.exit-program', {} ,function(e){
+            jQuery(".info-panel").hide();
+
             ipcRenderer.send('shutdown-ipfs', 1);
         });       
 

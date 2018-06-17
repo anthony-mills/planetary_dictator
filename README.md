@@ -22,7 +22,11 @@ A lot of work is required, this software is currently sub Alpha. Some of the mor
 
 ![Loading screen while IPFS node is starting](/img/screenshots/loading.png?raw=true "IPFS Node Starting")
 
-![File View](/img/screenshots/interface.png?raw=true "Planetary Director File View")
+![Main interface looking at a file on the local filesystem](/img/screenshots/interface_1.png?raw=true "Main interface looking at a file on the local filesystem")
+
+![Information about an IPFS object](/img/screenshots/interface_2.png?raw=true "Information about an IPFS object")
+
+![Connected peers to the local IPFS node](/img/screenshots/interface_3.png?raw=true "Connected peers to the local IPFS node")
 
 ### Credits
 

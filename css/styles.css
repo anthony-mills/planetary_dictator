@@ -63,7 +63,7 @@ h1, h2 {
   border-bottom: 1px solid #33FF00; }
   .file-browser-panel #display-local-files, .file-browser-panel #display-ipfs-files {
     padding: 15px;
-    height: 50vh;
+    height: 45vh;
     overflow-y: scroll; }
     .file-browser-panel #display-local-files li, .file-browser-panel #display-ipfs-files li {
       list-style-type: none;
@@ -80,6 +80,11 @@ h1, h2 {
 .loading-msg {
   padding: 20px;
   color: #101010; }
+
+.info-panel {
+  margin: 5px 15px 5px 15px;
+  padding: 5px 15px 5px 15px;
+  border: 1px solid; }
 
 .boot-quote {
   color: #333;

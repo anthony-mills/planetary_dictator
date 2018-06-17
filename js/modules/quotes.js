@@ -8,6 +8,22 @@ var spaceQuotes = [
 		attribution: "Stephen Hawking"
 	},
 	{
+		quote: "Earth is a small town with many neighborhoods in a very big universe.",
+		attribution: "Ron Garan"
+	},
+	{
+		quote: "NASA takes you to where your imagination has already been.",
+		attribution: "Anthony T. Hincks"
+	},
+	{
+		quote: "Language is a virus from outer space",
+		attribution: "William S. Burroughs"
+	},			
+	{
+		quote: "It is a very sobering feeling to be up in space and realize that one's safety factor was determined by the lowest bidder on a government contract.",
+		attribution: "Alan Shepard"
+	},	
+	{
 		quote: "Space exploration is a force of nature unto itself that no other force in society can rival.",
 		attribution: "Neil deGrasse Tyson"
 	},

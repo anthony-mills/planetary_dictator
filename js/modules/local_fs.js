@@ -39,12 +39,14 @@ exports.fileInfo = function( filePath, fsElm ) {
             var objType = 'Link';                
         }            
 
+        console.log( fileDets.birthtimeMs );
+        
         return {
         	"file_path": filePath,
         	"obj_type": objType,
         	"file_size": fileDets.size,
         	"file_perms": filePerms,
-        	"file_created": fileDets.birthtime.toLocaleString()
+        	"file_created": fileDets.birthtimeMs
         }            
 
     });
