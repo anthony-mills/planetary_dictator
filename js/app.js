@@ -75,12 +75,15 @@ var planetaryDictator = {
 
             setTimeout(function() {
               jQuery(".modal-header").show();
+
               jQuery('#notification-modal').hide();
+              jQuery('#notification-modal').removeClass("loading-modal");
 
               jQuery('.modal-body').html();
               jQuery('.modal-title').html();
 
               jQuery( ".loading-cover" ).fadeOut( 800 );
+
             }, 500);            
            
         }); 
@@ -364,13 +367,13 @@ var planetaryDictator = {
         jQuery('#right-controls').html('');
 
         console.log( ipfsFile );
-        var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
+        var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
 
         if (ipfsFile.pinned) {
-            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary pin-file">Unpin File</button>';
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal pin-file">Unpin File</button>';
             var pinStatus = '<li><strong>Pinned:</strong> True</li>';
         } else {
-            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-primary pin-file">Pin File</button>';
+            htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal pin-file">Pin File</button>';
             var pinStatus = '<li><strong>Pinned:</strong> False</li>';
         }                   
 
@@ -422,7 +425,7 @@ var planetaryDictator = {
 
         localFs.fileInfo( filePath, fsElm ).then(function( fileDets ) {
             jQuery('#right-controls').html('');
-            var htmlStr = '<button type="button" class="btn btn-primary move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
+            var htmlStr = '<button type="button" class="btn btn-terminal move-to-ipfs" data-name="' + fsElm + '" data-path="'+ filePath +'">' +
                         'Add to IPFS</button>';
 
             jQuery('#right-controls').append( htmlStr );   

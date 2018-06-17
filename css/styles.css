@@ -9,11 +9,17 @@
   font-family: "Roboto";
   src: url("fonts/roboto.eot?") format("eot"), url("fonts/roboto.woff2") format("woff2"), url("fonts/roboto.woff") format("woff"), url("fonts/roboto.ttf") format("truetype"); }
 
+a {
+  color: #33FF00; }
+
+a:hover {
+  color: #ffcc00; }
+
 body {
   height: 100px;
   padding: 15px;
-  background-color: #fff;
-  color: #000; }
+  background-color: #101010;
+  color: #33FF00; }
 
 .loading-cover {
   z-index: 5;
@@ -33,7 +39,7 @@ h1, h2 {
   font-family: "Orbitron"; }
 
 #file-actions {
-  border-bottom: 1px solid #000; }
+  border-bottom: 1px solid #33FF00; }
   #file-actions .action-buttons {
     text-align: center;
     width: 100%;
@@ -53,8 +59,8 @@ h1, h2 {
   margin-bottom: 50px; }
 
 .file-browser-panel {
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000; }
+  border-top: 1px solid #33FF00;
+  border-bottom: 1px solid #33FF00; }
   .file-browser-panel #display-local-files, .file-browser-panel #display-ipfs-files {
     padding: 15px;
     height: 50vh;
@@ -71,9 +77,14 @@ h1, h2 {
     .file-browser-panel #display-local-files li.file-icon, .file-browser-panel #display-ipfs-files li.file-icon {
       background: url("../img/icons/file.png") no-repeat left top; }
 
+.loading-msg {
+  padding: 20px;
+  color: #101010; }
+
 .boot-quote {
   color: #333;
-  font-size: 90%; }
+  font-size: 90%;
+  padding-top: 10px; }
   .boot-quote p {
     text-align: center; }
   .boot-quote .quote-attribution {
@@ -81,21 +92,42 @@ h1, h2 {
     float: right;
     font-size: 90%; }
 
-.modal-content {
-  border: 1px solid #000;
-  overflow-x: hidden; }
-  .modal-content #modal-body .loading-msg {
-    padding: 20px; }
-  .modal-content #modal-body .loading-animation {
-    padding: 10px 0px 20px 0px; }
-  .modal-content #modal-body .swarm-info {
-    max-height: 450px;
-    overflow-y: scroll; }
-    .modal-content #modal-body .swarm-info .peer-title {
-      padding: 5px 0px 5px 0px; }
-    .modal-content #modal-body .swarm-info .peer-info {
-      color: #333;
-      font-size: 95%; }
+#notification-modal {
+  color: #101010 !important; }
+  #notification-modal .modal-content {
+    border: 1px solid #000;
+    overflow-x: hidden; }
+    #notification-modal .modal-content .modal-header {
+      color: #101010 !important; }
+    #notification-modal .modal-content #modal-body .loading-animation {
+      padding: 10px 0px 20px 0px; }
+    #notification-modal .modal-content #modal-body .swarm-info {
+      max-height: 450px;
+      overflow-y: scroll; }
+      #notification-modal .modal-content #modal-body .swarm-info .peer-title {
+        padding: 5px 0px 5px 0px; }
+      #notification-modal .modal-content #modal-body .swarm-info .peer-info {
+        color: #333;
+        font-size: 95%; }
 
 .save-button:hover {
   background-color: #025ade; }
+
+.btn-terminal {
+  background-color: #33FF00;
+  color: #101010; }
+
+.btn-terminal:hover {
+  background-color: #000;
+  color: #33FF00; }
+
+.btn-shutdown {
+  color: #101010;
+  background-color: #dc3545; }
+
+.btn-shutdown:hover {
+  background-color: #000;
+  color: #33FF00; }
+
+.btn:focus {
+  box-shadow: none !important; }

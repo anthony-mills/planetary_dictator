@@ -1,8 +1,9 @@
 /**
 * Initialise some variables for the Planetary Director file manager
 **/
-$bgColour: #fff;
-$txtColour: #000;
+$bgColour: #101010;
+$txtColour: #33FF00;
+$borderColour: #33FF00;
 
 @font-face {
 	font-family: "Orbitron";
@@ -18,6 +19,14 @@ $txtColour: #000;
 		 url("fonts/roboto.woff2") format("woff2"),
 		 url("fonts/roboto.woff") format("woff"),
 		 url("fonts/roboto.ttf") format("truetype");
+}
+
+a {
+	color: $txtColour;	
+}
+
+a:hover {
+	color: #ffcc00;
 }
 
 body {
@@ -55,7 +64,7 @@ h1, h2 {
 }
 
 #file-actions {
-	border-bottom: 1px solid #000;
+	border-bottom: 1px solid $borderColour;
 
 	.action-buttons {
 		text-align: center;
@@ -82,8 +91,8 @@ h1, h2 {
 }
 
 .file-browser-panel {
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;	
+	border-top: 1px solid $borderColour;
+	border-bottom: 1px solid $borderColour;	
 
 	#display-local-files, #display-ipfs-files {
 		padding: 15px;
@@ -111,9 +120,16 @@ h1, h2 {
 	}	
 }
 
+.loading-msg {
+	padding: 20px;
+	color: $bgColour;
+}
+
 .boot-quote {
 	color: #333;
 	font-size: 90%;	
+
+	padding-top: 10px;
 
 	p {
 		text-align: center;
@@ -122,39 +138,68 @@ h1, h2 {
 	.quote-attribution {
 		font-style: italic;
 		float: right;
-		font-size: 90%;
+	 	font-size: 90%;
 	}
 }
 
-.modal-content {
-	border: 1px solid #000;
-	overflow-x: hidden;
+#notification-modal {
+	color: $bgColour !important;
+		
+	.modal-content {
+		border: 1px solid #000;
+		overflow-x: hidden;
 
-    #modal-body {
-    	.loading-msg {
-    		padding: 20px;
-    	}
+		.modal-header {
+	    	color: $bgColour !important;
+		}
 
-    	.loading-animation {
-    		padding: 10px 0px 20px 0px;
-    	}
+	    #modal-body {
 
-    	.swarm-info {
-			max-height:450px;
-	    	overflow-y:scroll;
+	    	.loading-animation {
+	    		padding: 10px 0px 20px 0px;
+	    	}
 
-			.peer-title {
-				padding: 5px 0px 5px 0px;
-			}
+	    	.swarm-info {
+				max-height:450px;
+		    	overflow-y:scroll;
 
-			.peer-info {
-				color: #333;
-				font-size:95%
-			}
-    	}	
-    }
+				.peer-title {
+					padding: 5px 0px 5px 0px;
+				}
+
+				.peer-info {
+					color: #333;
+					font-size:95%
+				}
+	    	}	
+	    }
+	}	
 }
 
 .save-button:hover {
 	background-color: #025ade;
+}
+
+.btn-terminal {
+	background-color: $txtColour;
+	color: $bgColour;
+}
+
+.btn-terminal:hover {
+	background-color: #000;
+	color: $txtColour;
+}
+
+.btn-shutdown {
+	color: $bgColour;
+	background-color: #dc3545;
+}
+
+.btn-shutdown:hover {
+	background-color: #000;
+	color: $txtColour;
+}
+
+.btn:focus {
+	box-shadow: none !important;
 }
