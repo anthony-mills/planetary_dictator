@@ -4,29 +4,6 @@ const app = electron.app
 
 const template = [
   {
-    
-    label: 'View',
-    submenu: [    
-      {role: 'reload'},
-      {role: 'forcereload'},    
-      {
-        role: 'resetzoom'
-      },
-      {
-        role: 'zoomin'
-      },
-      {
-        role: 'zoomout'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      }
-    ]
-  },
-  {
     role: 'window',
     submenu: [
       {
