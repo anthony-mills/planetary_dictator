@@ -7,8 +7,6 @@ const path = require('path')
 const url = require('url') 
 
 const IPFS = require('ipfs');
-const ipfsFactory = require('ipfsd-ctl');
-const ipfsServer = ipfsFactory.create();
 const ipfsAPI = require('ipfs-api');
 
 var ipfsLib = {};
@@ -44,7 +42,7 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -65,27 +63,27 @@ app.on('ready', () => {
 
   createWindow();
 
-  var nodeSettings = {
-      disposable: true,
-      defaultAddrs: true
-  }
+  mainWindow.webContents.on('did-finish-load', function() {
+    const ipfsServer = new IPFS();
 
-  ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
-      
-      ipfsInfo.api.version((err, ipfsVersion) => {
-          if (err) { throw err }
+    ipfsServer.on('ready', (err) => {
 
-          global.ipfsDetails = {
-            "version" : ipfsVersion.version,
-            "port" : ipfsInfo.api.apiPort
-          }
+      ipfsServer.version((err, version) => {
+        if (err) {
+          throw err
+        }
 
-          ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
-          
+        global.ipfsDetails = {
+          "version" : 'IPFS JS ' + version.version,
+          "port" : 5001
+        }
+        setTimeout(function(){ 
           mainWindow.webContents.send('ipfs-start', true);
-          
-          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);    
-      })  
+        }, 5000);
+        
+      })
+
+    })     
   })  
 })
 
@@ -112,12 +110,14 @@ app.on('activate', function () {
 })
 
 function shutdownIpfs() {
-  if (typeof ipfsLib.stop === "function") {
-    ipfsLib.stop((err) => {
+  if (typeof ipfsServer !== "undefined") {
+    ipfsServer.stop((err) => {
         if(err) throw err;
 
         app.quit();
-    });   
+    }); 
+  } else {
+    app.quit();
   }
 }
   
