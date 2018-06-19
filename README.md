@@ -6,7 +6,7 @@ An electron based filemanger in the style of Norton Commander or Filezilla for m
 
 ### Prebuilt Downloads
 
-Just want to start using the application with haviing to build it yourself?
+Just want to start using the application with having to build it yourself?
 Download one of the following prebuilt application images.
 
 **Linux**
