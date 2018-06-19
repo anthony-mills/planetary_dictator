@@ -11,6 +11,7 @@ const ipfsAPI = require('ipfs-api');
 
 var ipfsLib = {};
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -62,7 +63,7 @@ function createWindow () {
 app.on('ready', () => {
 
   createWindow();
-
+  mainWindow.maximize()
   mainWindow.webContents.on('did-finish-load', function() {
     const ipfsServer = new IPFS();
 
