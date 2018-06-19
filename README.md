@@ -9,7 +9,7 @@ An electron based filemanger in the style of Norton Commander or Filezilla for m
 Just want to start using the application with haviing to build it yourself?
 Download one of the following prebuilt application images.
 
-**Linux **
+**Linux**
 
 * [.deb release](https://github.com/anthony-mills/planetary_dictator/releases/download/0.0.1/planetary-dictator_0.0.1_amd64.deb) - for 64 bit Linux systems running a Debian based distro ( Ubuntu, Linux Mint etc )
 * [.AppImage release](https://github.com/anthony-mills/planetary_dictator/releases/download/0.0.1/planetary-dictator-0.0.1-x86_64.AppImage) - Generic AppImage based binary for 64 bit Linux systems.
