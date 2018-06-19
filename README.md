@@ -4,7 +4,7 @@
 
 An electron based filemanger in the style of Norton Commander or Filezilla for managing the filestore of an IPFS ( Interplanetary Filesystem ) node.
 
-### Prebuilt
+### Prebuilt Downloads
 
 Just want to start using the application with haviing to build it yourself?
 Download one of the following prebuilt application images.
