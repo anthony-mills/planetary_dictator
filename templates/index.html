@@ -13,11 +13,10 @@
 
     <script>    
       planetaryDictator.lsSysDir( userHome );
-
-      setTimeout(function() {
+      const quoteModule = require('../js/modules/quotes.js');
+      
+      jQuery( document ).ready(function() {
         jQuery('.close-modal').hide();
-
-        const quoteModule = require('../js/modules/quotes.js');
 
         quoteModule.getQuote();
 
@@ -25,7 +24,7 @@
 
         planetaryDictator.checkNode();
         planetaryDictator.bindClicks();
-      }, 500);
+      });
     </script>    
   </head>
   <body>

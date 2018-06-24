@@ -44,16 +44,16 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  //mainWindow.on('closed', function () {
+  mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
 
-    mainWindow = null
-  })
+    mainWindow = null;
+  });
 
   require('./menus/main_menu.js');
 }
@@ -72,29 +72,31 @@ app.on('ready', () => {
       defaultAddrs: true
   }
 
-  ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
-    if (err) {
-      console.log( err );
+  app.on('web-contents-created', () => {
+    ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
+      if (err) {
+        console.log( err );
 
-      app.quit();
-    }
+        app.quit();
+      }
 
-    if (ipfsInfo) {     
-      ipfsInfo.api.version((err, ipfsVersion) => {
+      if (ipfsInfo) {     
+        ipfsInfo.api.version((err, ipfsVersion) => {
 
-          global.ipfsDetails = {
-            "version" : ipfsVersion.version,
-            "port" : ipfsInfo.api.apiPort
-          }
+            global.ipfsDetails = {
+              "version" : ipfsVersion.version,
+              "port" : ipfsInfo.api.apiPort
+            }
 
-          ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
-          
-          mainWindow.webContents.send('ipfs-start', true);
-          
-          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);              
-      })  
-    }
-  })  
+            ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
+            
+            mainWindow.webContents.send('ipfs-start', true);
+            
+            console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);              
+        })  
+      }
+    }) 
+  }) 
 })
 
 // Quit when all windows are closed.
