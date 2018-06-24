@@ -44,10 +44,10 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  //mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -73,9 +73,14 @@ app.on('ready', () => {
   }
 
   ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
-      
+    if (err) {
+      console.log( err );
+
+      app.quit();
+    }
+
+    if (ipfsInfo) {     
       ipfsInfo.api.version((err, ipfsVersion) => {
-          if (err) { throw err }
 
           global.ipfsDetails = {
             "version" : ipfsVersion.version,
@@ -86,8 +91,9 @@ app.on('ready', () => {
           
           mainWindow.webContents.send('ipfs-start', true);
           
-          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);    
+          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);              
       })  
+    }
   })  
 })
 
