@@ -23,8 +23,8 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow(
                                   {
-                                    minWidth: 400,                                    
-                                    minHeight: 300,
+                                    minWidth: 800,                                    
+                                    minHeight: 600,
                                     maxWidth: 1200,
                                     maxHeight: 900,
                                     width: 800, 
@@ -44,7 +44,7 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -64,6 +64,8 @@ function createWindow () {
 app.on('ready', () => {
 
   createWindow();
+
+  mainWindow.maximize();
 
   var nodeSettings = {
       disposable: true,
@@ -119,9 +121,16 @@ function shutdownIpfs() {
         app.quit();
     });   
   }
+
+  // Kill the app after 10 seconds if the shutdown hangs
+  setTimeout(function() {
+    app.quit();
+  }, 10000);   
 }
   
 
 ipcMain.on('shutdown-ipfs', (event, arg) => {  
+  mainWindow.webContents.send('shutting-down', true);
+
   shutdownIpfs();
 });

@@ -34,6 +34,8 @@ var planetaryDictator = {
     *
     */
     checkNode: function() {
+        var refreshData = false;
+
         ipcRenderer.on('ipfs-start', (event, arg) => { 
             var ipfsPort = remote.getGlobal('ipfsDetails').port;
    
@@ -73,7 +75,7 @@ var planetaryDictator = {
                 });
             }
 
-            setInterval(updateNode, 1000);
+            refreshData = setInterval(updateNode, 1000);
 
             setTimeout(function() {
               jQuery(".modal-header").show();
@@ -88,7 +90,17 @@ var planetaryDictator = {
 
             }, 500); 
         });    
-           
+
+        ipcRenderer.on('shutting-down', (event, arg) => { 
+            clearInterval( refreshData );
+
+            jQuery("#file-actions").removeClass("row");
+            jQuery("#file-actions").html(
+                '<div class="text-center pt-4 pb-4">' +
+                'Shutting node down...' +
+                '</div>'
+            );
+        });             
     },
 
     /**
@@ -503,14 +515,14 @@ var planetaryDictator = {
             if (isFolder || isParent ) {
               planetaryDictator.lsSysDir( elmPath, true );
             } else {
-              localFs.openFile( elmPath );                
+              shell.openExternal( elmPath );                
             }
         }); 
 
         jQuery(document).on('click','.open-external', {} ,function(e){
             var linkLocation = jQuery(this).attr('href');
 
-            localFs.openFile( linkLocation );
+            shell.openExternal( linkLocation );
 
             e.preventDefault()
         }); 

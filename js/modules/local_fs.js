@@ -1,20 +1,4 @@
 /**
-* Handle planetary dicatator functionality when dealing with the local filesystem
-*/
-exports.openFile = function( filePath ) {
-    shell.openItem( filePath );
-};
-
-/**
-* Open a file using the system default associated application
-*
-* @param string filePath
-*/
-exports.openFile = function( filePath ) {
-    shell.openItem( filePath );
-}
-
-/**
 * Get the file info for a file or directory on the local filesystem
 *
 * @param string filePath
