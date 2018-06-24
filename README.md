@@ -4,6 +4,7 @@
 
 An electron based filemanger in the style of Norton Commander or Filezilla for managing the filestore of an IPFS ( Interplanetary Filesystem ) node.
 
+
 ### Getting started
 
 * _npm install_ To get the required dependencies
@@ -14,7 +15,6 @@ An electron based filemanger in the style of Norton Commander or Filezilla for m
 
 A lot of work is required, this software is currently sub Alpha. Some of the more immediate tasks are:
 
-* Pinning of files to the IPFS node
 * Making the interface somewhat presentable
 * Sorting out how to present objects from directories in the IPFS view
 

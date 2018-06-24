@@ -35,7 +35,9 @@ var planetaryDictator = {
     */
     checkNode: function() {
         ipcRenderer.on('ipfs-start', (event, arg) => { 
-            ipfsLib = ipfsAPI({port: remote.getGlobal('ipfsDetails').port});
+            var ipfsPort = remote.getGlobal('ipfsDetails').port;
+   
+            ipfsLib = ipfsAPI({port: ipfsPort});
 
             var updateNode = function() {
                 ipfsLib.repo.stat((err, stats) => {
@@ -84,9 +86,9 @@ var planetaryDictator = {
 
               jQuery( ".loading-cover" ).fadeOut( 800 );
 
-            }, 500);            
+            }, 500); 
+        });    
            
-        }); 
     },
 
     /**
