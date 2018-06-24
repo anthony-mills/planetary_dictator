@@ -72,31 +72,35 @@ app.on('ready', () => {
       defaultAddrs: true
   }
 
-  app.on('web-contents-created', () => {
-    ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
-      if (err) {
-        console.log( err );
 
-        app.quit();
-      }
+  console.log("Attempting to spawn IPFS node.");
 
-      if (ipfsInfo) {     
-        ipfsInfo.api.version((err, ipfsVersion) => {
+  ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
+    if (err) {
+      console.log( err );
 
-            global.ipfsDetails = {
-              "version" : ipfsVersion.version,
-              "port" : ipfsInfo.api.apiPort
-            }
+      app.quit();
+    }
 
-            ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
-            
-            mainWindow.webContents.send('ipfs-start', true);
-            
-            console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);              
-        })  
-      }
-    }) 
-  }) 
+    if (ipfsInfo) {
+
+      console.log("Getting IPFS version number.");     
+
+      ipfsInfo.api.version((err, ipfsVersion) => {
+
+          global.ipfsDetails = {
+            "version" : ipfsVersion.version,
+            "port" : ipfsInfo.api.apiPort
+          }
+
+          ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
+          
+          mainWindow.webContents.send('ipfs-start', true);
+          
+          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);              
+      })  
+    }
+  })  
 })
 
 // Quit when all windows are closed.
