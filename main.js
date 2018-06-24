@@ -7,10 +7,11 @@ const path = require('path')
 const url = require('url') 
 
 const IPFS = require('ipfs');
+const ipfsFactory = require('ipfsd-ctl');
+const ipfsServer = ipfsFactory.create();
 const ipfsAPI = require('ipfs-api');
 
 var ipfsLib = {};
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -43,7 +44,6 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-
   //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
@@ -64,28 +64,28 @@ function createWindow () {
 app.on('ready', () => {
 
   createWindow();
-  mainWindow.maximize()
-  mainWindow.webContents.on('did-finish-load', function() {
-    const ipfsServer = new IPFS();
 
-    ipfsServer.on('ready', (err) => {
+  var nodeSettings = {
+      disposable: true,
+      defaultAddrs: true
+  }
 
-      ipfsServer.version((err, version) => {
-        if (err) {
-          throw err
-        }
+  ipfsServer.spawn( nodeSettings, (err, ipfsInfo) => {
+      
+      ipfsInfo.api.version((err, ipfsVersion) => {
+          if (err) { throw err }
 
-        global.ipfsDetails = {
-          "version" : 'IPFS JS ' + version.version,
-          "port" : 5001
-        }
-        setTimeout(function(){ 
+          global.ipfsDetails = {
+            "version" : ipfsVersion.version,
+            "port" : ipfsInfo.api.apiPort
+          }
+
+          ipfsLib = ipfsAPI({port: ipfsInfo.api.apiPort});
+          
           mainWindow.webContents.send('ipfs-start', true);
-        }, 5000);
-        
-      })
-
-    })     
+          
+          console.log('IPFS Daemon running on port: ', ipfsInfo.api.apiPort);    
+      })  
   })  
 })
 
@@ -112,14 +112,12 @@ app.on('activate', function () {
 })
 
 function shutdownIpfs() {
-  if (typeof ipfsServer !== "undefined") {
-    ipfsServer.stop((err) => {
+  if (typeof ipfsLib.stop === "function") {
+    ipfsLib.stop((err) => {
         if(err) throw err;
 
         app.quit();
-    }); 
-  } else {
-    app.quit();
+    });   
   }
 }
   
