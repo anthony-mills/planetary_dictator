@@ -12,6 +12,7 @@ const os = require('os');
 const fileSystem = require('promise-fs');
 const path = require('path');
 const userHome = require('user-home');
+const clipboardCopy = require('copy-to-clipboard');
 
 const localFs = require('../js/modules/local_fs.js');
 
@@ -374,7 +375,9 @@ var planetaryDictator = {
         jQuery('#right-controls').html('');
 
         console.log( ipfsFile );
-        var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
+        var htmlStr = '<button type="button" data-ipfs-elm="' + ipfsFile.ipfs_hash + '" class="btn btn-terminal open-external" href="https://gateway.ipfs.io/ipfs/' + ipfsFile.ipfs_hash + '">Open via Gateway</button>';
+
+        htmlStr += '<button type="button" data-ipfs-elm="' + ipfsFile.ipfs_hash + '" class="btn btn-terminal copy-clipboard">Copy Hash</button>';
 
         if (ipfsFile.pinned) {
             htmlStr += '<button type="button" data-ipfs-elm="' + ipfsElm + '" class="btn btn-terminal pin-file">Unpin File</button>';
@@ -533,6 +536,14 @@ var planetaryDictator = {
             var fsElm = jQuery(this).attr("data-name");
 
             return planetaryDictator.addIpfsFiles( elmPath, fsElm );
+        });
+
+        jQuery(document).on('click','.copy-clipboard', {} ,function(e){
+            var ipfsHash = jQuery(this).attr("data-ipfs-elm");
+            console.log( ipfsHash );
+            clipboardCopy( ipfsHash );
+
+            planetaryDictator.showAlert("Copied ipfs hash to clipboard.");
         });
 
         // Kill the daemon and exit the application

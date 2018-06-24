@@ -125,7 +125,7 @@ function shutdownIpfs() {
   // Kill the app after 10 seconds if the shutdown hangs
   setTimeout(function() {
     app.quit();
-  }, 10000);   
+  }, 5000);   
 }
   
 
