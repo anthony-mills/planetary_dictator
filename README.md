@@ -4,6 +4,18 @@
 
 An electron based filemanger in the style of Norton Commander or Filezilla for managing the filestore of an IPFS ( Interplanetary Filesystem ) node.
 
+### PreBuilt Downloads
+
+**Linux 64bit**
+
+* [.deb for Debian](https://github.com/anthony-mills/planetary_dictator/releases/download/untagged-b3f6a5dd604fcc6aa0b3/planetary-dictator_0.0.1_amd64.deb) based Systems i.e Linux Mint, Ubuntu etc
+* [AppImage](https://github.com/anthony-mills/planetary_dictator/releases/download/untagged-b3f6a5dd604fcc6aa0b3/planetary-dictator-0.0.1-x86_64.AppImage) for use on all Linux systems
+
+**MacOS**
+* [.dmg file](https://github.com/anthony-mills/planetary_dictator/releases/download/untagged-b3f6a5dd604fcc6aa0b3/planetary-dictator-0.0.1.dmg) for use on MacOS 
+
+**Windows**
+I do not have access to a Windows machine to build a release unfortunately. So if you wan't a Windows build you will have to clone the repo and build it yourself :-
 
 ### Getting started
 
